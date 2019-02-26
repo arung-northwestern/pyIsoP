@@ -1,18 +1,19 @@
 class grid3D(object):
 
     """
-                      #####  ######  ### ######     #     # ####### ######  #     # #       #######
-                     #     # #     #  #  #     #    ##   ## #     # #     # #     # #       #
-                     #       #     #  #  #     #    # # # # #     # #     # #     # #       #
-                     #  #### ######   #  #     #    #  #  # #     # #     # #     # #       #####
-                     #     # #   #    #  #     #    #     # #     # #     # #     # #       #
-                     #     # #    #   #  #     #    #     # #     # #     # #     # #       #
-                      #####  #     # ### ######     #     # ####### ######   #####  ####### #######
+
+      #####  ######  ### ######     #     # ####### ######  #     # #       #######
+    #     # #     #  #  #     #    ##   ## #     # #     # #     # #       #
+    #       #     #  #  #     #    # # # # #     # #     # #     # #       #
+    #  #### ######   #  #     #    #  #  # #     # #     # #     # #       #####
+    #     # #   #    #  #     #    #     # #     # #     # #     # #       #
+    #     # #    #   #  #     #    #     # #     # #     # #     # #       #
+      #####  #     # ### ######     #     # ####### ######   #####  ####### #######
 
 
-                    Calculates the energy grid for the cif file using a cpu or gpu 
-                    ! Does not include the electrostatics
-                    TODO: Add the GPU based grid calculation..? or should we just do that as a decorator for the potential.
+    Calculates the energy grid for the cif file using a cpu or gpu 
+    ! Does not include the electrostatics
+    TODO: Add the GPU based grid calculation..? or should we just do that as a decorator for the potential.
     """
     import numpy as np
 
