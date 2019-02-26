@@ -18,7 +18,7 @@ class potentials:
             pass
         # * The Lennard-Jones Potential
 
-        @vectorize(['float64(float64, float64, float64)'], target='cpu')
+        @vectorize(['float64(float64, float64, float64, float64)'], target='cpu')
         def lj(self, rsq, epsilon, sigma): 
             """ Description
 
@@ -41,7 +41,7 @@ class potentials:
             return (4*self.epsilon) * (((self.sigma)**12/(rsq)**6) - ((self.sigma)**6/(rsq)**3))
 
         # * Lennard Jones with the Feynman-Hibbs correction    
-        @vectorize(['float64(float64, float64, float64)'], target='cpu')
+        @vectorize(['float64(float64, float64, float64, float64, float64, float64)'], target='cpu')
         def ljfh(self, rsq, epsilon, sigma, rmass, T):
             """ Description
 
