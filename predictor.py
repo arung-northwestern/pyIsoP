@@ -13,7 +13,7 @@ class predictors:
     def __init__(self):
         pass
 
-    def predict_isotherm(self, T, pressures, vf, histogram, n1, epsilon=36.7, MA=2.0, theta=0.0):
+    def predict_isotherm(self, T, pressures, vf, hist_obj, n1, epsilon=36.7, MA=2.0, theta=0.0):
         """ Description
         
         Calculates the adsorption isotherm using the fundamental equation of adsorption with the pressures, energy histogram, the void fraction
@@ -30,8 +30,8 @@ class predictors:
         :type vf: float 
         :param vf: void fraction of the material, needed for the saturation loading
     
-        :type histogram: 2D array of float with two columns
-        :param histogram: The histogram of the site energies with a maximum set
+        :type histogram: instance of the histo class
+        :param histogram: The histogram object containing all the information about the energy histogram
     
         :type n1: Array of floats
         :param n1: First shell coordination numbers at the different pressures of interest.
@@ -54,8 +54,8 @@ class predictors:
         import scipy.integrate as intg
 
         saturation_loading = 70.8 * vf
-        Ered               = histogram[:, 0]/T
-        RhoE               = histogram[:, 1]
+        Ered               = hist_obj.E/T
+        RhoE               = hist_ob.RhoE
         loading_predicted  = []
         for p_index in range(len(pressures)):
             p              = pressures[p_index]
