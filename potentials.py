@@ -79,6 +79,6 @@ class potentials:
             amu = 1.66054E-27    # * amu in kg
             k_B = 1.38065852E-27  # * Boltzmann constant in J/K or kg m2 s-2 K-1
 
-            const = hcut**2 / ((rsq*angs**2)*(24*rmass*amu*k_B*self.T)) # * Note  that this constant is dimensionless
+            const = hcut**2 / ((rsq*angs**2)*(24*self.rmass*amu*k_B*self.T)) # * Note  that this constant is dimensionless
 
             return (4*self.epsilon) * (((self.sigma)**12/(rsq)**6) - ((self.sigma)**6/(rsq)**3)) + const*(4*self.epsilon) * (132*((self.sigma)**12/(rsq)**6) - 30*((self.sigma)**6/(rsq)**3))
