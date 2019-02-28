@@ -15,8 +15,8 @@ class grid3D(object):
     ! Does not include the electrostatics
     TODO: Add the GPU based grid calculation..? or should we just do that as a decorator for the potential.
     """
-    import numpy as np
-
+ 
+    # * Initialize the grid object
     def __init__(self, cif_file, spacing=1.0, cutoff=12.8):
         """ Description
         Function to initiate the grid3D class object.
@@ -35,7 +35,7 @@ class grid3D(object):
     
         :rtype: Returns an instance of the class grid3D
         """
-
+        import numpy as np
         from pymatgen.io.cif import CifParser
         self.file                              = cif_file
         self.spacing                           = spacing
@@ -92,7 +92,7 @@ class grid3D(object):
         self.vol                               = struct.volume
 
         self.A                                 = [[self.la, 0, 0], [self.lb*np.cos(gamma), self.lb*np.sin(gamma), 0], [self.lc*np.cos(beta), self.lc *
-                                                                                                     (np.cos(alpha)-np.cos(beta)*np.cos(gamma))/np.sin(gamma), self.vol/(self.la*self.lb*np.sin(gamma))]]
+                                                                                       (np.cos(alpha)-np.cos(beta)*np.cos(gamma))/np.sin(gamma), self.vol/(self.la*self.lb*np.sin(gamma))]]
         self.A                                 = np.array(self.A)
         self.A                                 = self.A.T
         self.A_inv                             = np.linalg.inv(self.A)
@@ -104,7 +104,7 @@ class grid3D(object):
         self.z_grid                            = np.linspace(0, 1.0/self.nz_cells, self.nz)
 
         # Shift every thing to the center of the box for the round commmand to work properly
-        self.x_grid, self.y_grid, self. z_grid = self.x_grid - 0.5, self._grid - 0.5, self.z_grid - 0.5
+        self.x_grid, self.y_grid, self. z_grid = self.x_grid - 0.5, self.y_grid - 0.5, self.z_grid - 0.5
         self.coord                             = self.coord - 0.5
 
         # Read the corresponding  atoms information
@@ -117,10 +117,15 @@ class grid3D(object):
 
         self.pot                               = np.zeros((self.nx, self.ny, self.nz))
         self.pot_repeat                        = np.tile(self.pot, (self.nx_cells, self.ny_cells, self.nz_cells))
-        # def CalculateCPU():
+        # * Total points 
+        self.nx_total = int(self.nx*self.nx_cells)
+        self.ny_total = int(self.ny*self.ny_cells)
+        self.nz_total = int(self.nz*self.nz_cells)
 
+        self.N_grid_total = self.nx_total * self.ny_total * self.nz_total
+
+    # * Calculate the energy grid
     def grid_calc(grid_obj, potential_name, ff_obj, rmass=None, T=None):
-
           """ Description
           :type grid_obj: instance of the grid object from the grid3D module
           :param grid_obj: contains al the details for the energy grid calculation
@@ -137,28 +142,30 @@ class grid3D(object):
 
           :rtype: Returns the 3D energy grid
           """
-
+          import numpy as np
           import potentials
-          p = potentials()
-          potential_form = getattr(p,potential_name) # * Used the string input to choose which function to call. This is cool
+          p                                    = potentials.potentials()
+          # * Used the string input to choose which function to call. This is cool
+          print(potential_name)
+          potential_form                       = getattr(p, str(potential_name))
           for k in range(grid_obj.nz):
             for j in range(grid_obj.ny):
               for i in range(grid_obj.nx):
                 grid_point                     = np.array([grid_obj.x_grid[i], grid_obj.y_grid[j], grid_obj.z_grid[k]])
                 diff_vec                       = grid_obj.coord-grid_point
                 diff_vec                       = diff_vec-np.round(diff_vec)
-                pbc_vec                        = np.dot(A, diff_vec.T).T
+                pbc_vec                        = np.dot(grid_obj.A, diff_vec.T).T
                 rsq                            = np.sum(pbc_vec**2, axis=1)
-                if potential_name=='lj':
-                  E                              = np.sum(potential_form(ff_obj.eps_array, ff_obj.sig_array, rsq))
-                elif potential_name=='ljfh' and T is not None and rmass is not None:
-                  E = np.sum(potential_form(ff_obj.eps_array, ff_obj.sig_array, rsq, rmass, T))
-                elif potential_name=='ljfh' and ((T is None) or (rmass is None)):
+                if potential_name              == 'lj':
+                  E                            = np.sum(potential_form(ff_obj.epsilon_array, ff_obj.sigma_array, rsq))
+                elif potential_name            == 'ljfh' and T is not None and rmass is not None:
+                  E                            = np.sum(potential_form(ff_obj.epsilon_array, ff_obj.sigma_array, rsq, rmass, T))
+                elif potential_name            == 'ljfh' and ((T is None) or (rmass is None)):
                       raise TypeError('Missing T and rmass for Feynman-Hibbs correction')
                 else:
                       raise NameError('Unknown potential: Add yours to potentials.py if need be')
 
                 grid_obj.pot[i][j][k]          = E
-        
 
-          grid_obj.pot_repeat = np.tile((grid_obj.nx_cells, grid_obj.ny_cells, grid_obj.nz_cells,),grid_obj.pot)
+          grid_obj.pot_repeat = np.tile(grid_obj.pot,(grid_obj.nx_cells, grid_obj.ny_cells, grid_obj.nz_cells,))
+          return grid_obj
