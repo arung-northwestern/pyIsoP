@@ -10,7 +10,7 @@ class forcefields:
         * Houses the force field object for the grid calculation
         * Houses the function to read the force field from the RASPA format dir and mixing rules file
         ! Default params are for hydrogen from UFF
-        TODO : Add the mixing rule and the option for the Lennard-Jones Feynman Hibbs
+
         """
 
         def __init__(self, grid_obj, force_field='UFF', sigma=2.958, epsilon=36.7, feynman_hibbs=False):

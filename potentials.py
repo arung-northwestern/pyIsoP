@@ -8,9 +8,7 @@ class potentials:
          #       #    #   #   #      #  # #   #   # ###### #           #
          #       #    #   #   #      #   ##   #   # #    # #      #    #
          #        ####    #   ###### #    #   #   # #    # ######  ####
-         # TODO: Add the Feynman-Hibbs potential along with the functional form to the list
-         # TODO: Add vectorize decorator for the potentials
-         # TODO: Add the ValueErrors and TypeErrors to potentials for safety
+      
          
         """
         from numba import vectorize

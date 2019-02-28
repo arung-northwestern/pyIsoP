@@ -18,8 +18,8 @@ class predictors:
         
         Calculates the adsorption isotherm using the fundamental equation of adsorption with the pressures, energy histogram, the void fraction
         of the material and the first shell coordination numbers of hydrogen in the material at the pressures of interest, as the inputs.
-        The first shell coordination number n1 maybe calculated from the coordination module using the machine learning model with training data
-        provided, only for 77 K and 160 K. Training data has to be generated using GCMC for other temperatures.
+        The first shell coordination number n1 maybe calculated from the coordination module using the machine learning model, with training data
+        provided only for 77 K and 160 K. Training data has to be generated using GCMC for other temperatures.
         
         :type T: float  
         :param T: Adsorption temperature

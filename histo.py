@@ -7,13 +7,10 @@ class histo:
     #       #   # # #       #   #   #     #    #       #     #  #        #    #    #     # #     # #   #   ####### #     #
     #       #    ## #       #    #  #     #    #       #     #  #  #     #    #    #     # #     # #    #  #     # #     #
     ####### #     # ####### #     #  #####     #       #     # ###  #####     #    #######  #####  #     # #     # #     #
-    * 
-    Functions to calculate or read the energy histogram of amaterial
     
-    TODO: Add grid object to histogram  object function
-    TODO: Add text file to histogram object function
-    TODO: Add RASPA grid to histogram  object function
-    TODO: Add cube file to histogram object function
+    * Functions to calculate or read the energy histogram of amaterial
+    
+
     ! Here the histogram is in the units of kT or RT maybe do it in [K] or kJ/mol instead
     ! Make sure to modify the predictor to account for the units of the energy in the histogram
     ! Make sure the predictor accounts for type of the histogram argument

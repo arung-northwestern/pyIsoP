@@ -11,8 +11,6 @@ class machlearn:
     Contains code to train the machine learning model to predict the first shell coordination nunber using Gaussian Process Regression (GPR)
     * Features : logarithm_10 of pressure [log(P)], void fraction (VF), largest cavity dia (LCD), pore limiting dia. (PLD)
     * refer to the documentation page for the format of the training data
-    TODO what attributes should the machlearn object have -- kernel and paramteres, xtr, ytr, xtest, ytest
-    TODO: Add functionality that the user can choose the kernel and the hyper parameters, might have to use getattr with string with importlib module
     """
     def __init__(self, scale=0.5, bounds=(0.1,10.0), restarts=10):
     
@@ -41,7 +39,8 @@ class machlearn:
         :raises:
     
         :rtype: An instance of the machlearn class.
-        """    from sklearn.gaussian_process.kernels import RationalQuadratic
+        """    
+        from sklearn.gaussian_process.kernels import RationalQuadratic
         from sklearn.gaussian_process import GaussianProcessRegressor
 
         self.n1_data=[]
