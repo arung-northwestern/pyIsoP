@@ -16,10 +16,10 @@ class potentials:
         from numba import vectorize
         def __init__(self):
             pass
+            
         # * The Lennard-Jones Potential
-
-        @vectorize(['float64(float64, float64, float64, float64)'], target='cpu')
-        def lj(self, rsq, epsilon, sigma): 
+        @vectorize(['float64(float64, float64, float64)'], target='cpu')
+        def lj( rsq, epsilon, sigma): 
             """ Description
 
             :type rsq: float
@@ -36,13 +36,11 @@ class potentials:
 
             :rtype: The Lennard-Jones potential value in 'float'.
             """
-            self.epsilon = epsilon
-            self.sigma = sigma
-            return (4*self.epsilon) * (((self.sigma)**12/(rsq)**6) - ((self.sigma)**6/(rsq)**3))
+            return (4*epsilon) * (((sigma)**12/(rsq)**6) - ((sigma)**6/(rsq)**3))
 
         # * Lennard Jones with the Feynman-Hibbs correction    
-        @vectorize(['float64(float64, float64, float64, float64, float64, float64)'], target='cpu')
-        def ljfh(self, rsq, epsilon, sigma, rmass, T):
+        @vectorize(['float64(float64, float64, float64, float64, float64)'], target='cpu')
+        def ljfh( rsq, epsilon, sigma, rmass, T):
             """ Description
 
             :type rsq: float
@@ -67,18 +65,13 @@ class potentials:
             :rtype: The Lennard-Jones potential value in 'float'.
             """
 
-            
-            self.epsilon = epsilon
-            self.sigma = sigma
-            self.rmass = rmass
-            self.T= T
-
+  
             # * Let's convert everything into SI unites to evaluate the Feynman Hibbs constant clearly: hcut**2/[(r**2)(24*pi*m*k_B*T)]
             hcut = 1.0545718E-34  # * Planck's constant / 2*pi in Js or kg m2 s-1
             angs = 1E-10          # * angstrom in m
             amu = 1.66054E-27    # * amu in kg
             k_B = 1.38065852E-27  # * Boltzmann constant in J/K or kg m2 s-2 K-1
 
-            const = hcut**2 / ((rsq*angs**2)*(24*self.rmass*amu*k_B*self.T)) # * Note  that this constant is dimensionless
+            const = hcut**2 / ((rsq*angs**2)*(24*rmass*amu*k_B*T)) # * Note  that this constant is dimensionless
 
-            return (4*self.epsilon) * (((self.sigma)**12/(rsq)**6) - ((self.sigma)**6/(rsq)**3)) + const*(4*self.epsilon) * (132*((self.sigma)**12/(rsq)**6) - 30*((self.sigma)**6/(rsq)**3))
+            return (4*epsilon) * (((sigma)**12/(rsq)**6) - ((sigma)**6/(rsq)**3)) + const*(4*epsilon) * (132*((sigma)**12/(rsq)**6) - 30*((sigma)**6/(rsq)**3))
