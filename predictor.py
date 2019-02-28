@@ -1,12 +1,12 @@
 class predictors:
     """
-     ######  ######  ####### ######  ###  #####  ####### ####### ######
-     #     # #     # #       #     #  #  #     #    #    #     # #     #
-     #     # #     # #       #     #  #  #          #    #     # #     #
-     ######  ######  #####   #     #  #  #          #    #     # ######
-     #       #   #   #       #     #  #  #          #    #     # #   #
-     #       #    #  #       #     #  #  #     #    #    #     # #    #
-     #       #     # ####### ######  ###  #####     #    ####### #     #
+    ######  ######  ####### ######  ###  #####  ####### ####### ######
+    #     # #     # #       #     #  #  #     #    #    #     # #     #
+    #     # #     # #       #     #  #  #          #    #     # #     #
+    ######  ######  #####   #     #  #  #          #    #     # ######
+    #       #   #   #       #     #  #  #          #    #     # #   #
+    #       #    #  #       #     #  #  #     #    #    #     # #    #
+    #       #     # ####### ######  ###  #####     #    ####### #     #
     * Takes in a set of pressures, void fraction, energy histogram and the first-shell coordination (n1) and predicts the adsorption isotherm
     """
     import numpy as np
@@ -19,7 +19,7 @@ class predictors:
         Calculates the adsorption isotherm using the fundamental equation of adsorption with the pressures, energy histogram, the void fraction
         of the material and the first shell coordination numbers of hydrogen in the material at the pressures of interest, as the inputs.
         The first shell coordination number n1 maybe calculated from the coordination module using the machine learning model with training data
-        provided only for 77 K and 160 K. Training data has to be generated using GCMC for other temperatures.
+        provided, only for 77 K and 160 K. Training data has to be generated using GCMC for other temperatures.
         
         :type T: float  
         :param T: Adsorption temperature
@@ -52,10 +52,10 @@ class predictors:
         :rtype: An array of adsorption loading in g/L
         """
         import scipy.integrate as intg
-
+        R=8.314
         saturation_loading = 70.8 * vf
         Ered               = hist_obj.E/T
-        RhoE               = hist_ob.RhoE
+        RhoE               = hist_obj.RhoE
         loading_predicted  = []
         for p_index in range(len(pressures)):
             p              = pressures[p_index]
