@@ -40,7 +40,7 @@ class histo:
         :rtype: Instance of the histogram class
         """
 
-        self.nbins                                                    = number
+        self.nbins                                                    = nbins
         self.E                                                        = []
         self.RhoE                                                     = []
         self.E_max                                                    = E_max
@@ -68,7 +68,7 @@ class histo:
         hist_obj.name                                                 = grid_obj.file
         e_vals                                                        = np.reshape(grid_obj.pot_repeat, (grid_obj.N_grid_total, 1), order='C')
         bins1                                                         = np.linspace(min(e_vals)-0.5, hist_obj.E_max, hist_obj.nbins+1)
-        RhoE, binedges1                                               = np.histogram(e_vals, bins=bins1, normed=hist_obj.normed_flag)
+        hist_obj.RhoE, binedges1                                               = np.histogram(e_vals, bins=bins1, normed=hist_obj.normed_flag)
         bincenters                                                    = 0.5 * (binedges1[1:] + binedges1[:-1])  # Bincenters
         hist_obj.E                                                    = bincenters
         return hist_obj
@@ -91,13 +91,13 @@ class histo:
 
         :rtype: histogram object with the energies and their densities updated
         """
-
+        import numpy as np
         import pandas as pd
 
         grid                                                          = pd.read_csv(grid_filename, header=None, delim_whitespace=True)  # Read the energy data
-        e_Vals                                                        = pd.to_numeric(grid[3][grid[3].as_matrix() != '?'])
+        e_vals                                                        = pd.to_numeric(grid[3][grid[3].as_matrix() != '?'])
         bins1                                                         = np.linspace(min(e_vals)-0.5, hist_obj.E_max, hist_obj.nbins+1)
-        RhoE, binedges1                                               = np.histogram(e_vals, bins=bins1, normed=hist_obj.normed_flag)
+        hist_obj.RhoE, binedges1 = np.histogram(e_vals, bins=bins1, normed=hist_obj.normed_flag)
         bincenters                                                    = 0.5 * (binedges1[1:] + binedges1[:-1])  # Bincenters
         hist_obj.E                                                    = bincenters
 
@@ -156,9 +156,9 @@ class histo:
         from ase.io.cube import read_cube_data
 
         data, atoms = read_cube_data(cube_filename)
-        e_vals = np.reshape(data, (data.size, 1), order=C)
+        e_vals = np.reshape(data, (data.size, 1), order='C')
         bins1 = np.linspace(min(e_vals)-0.5, hist_obj.E_max, hist_obj.nbins+1)
-        RhoE, binedges1 = np.histogram(e_vals, bins=bins1, normed=hist_obj.normed_flag)
+        hist_obj.RhoE, binedges1 = np.histogram(e_vals, bins=bins1, normed=hist_obj.normed_flag)
         bincenters = 0.5 * (binedges1[1:] + binedges1[:-1])  # Bincenters
         hist_obj.E = bincenters
 
