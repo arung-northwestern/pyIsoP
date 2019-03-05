@@ -8,6 +8,7 @@ class machlearn:
     #     # ####### #       #     #  #  #   # # #          #       #       ####### #   #   #   # #
     #     # #     # #     # #     #  #  #    ## #          #       #       #     # #    #  #    ##
     #     # #     #  #####  #     # ### #     # #######    ####### ####### #     # #     # #     #
+
     Contains code to train the machine learning model to predict the first shell coordination nunber using Gaussian Process Regression (GPR)
     * Features : logarithm_10 of pressure [log(P)], void fraction (VF), largest cavity dia (LCD), pore limiting dia. (PLD)
     * refer to the documentation page for the format of the training data
@@ -87,13 +88,13 @@ class machlearn:
     
         :rtype: An update instance of the machlearn class
         """    
-        
+        import pandas as pd
         import numpy as np
 
         ml_obj.n1_data               = pd.read_csv(data_file, delimiter=',', header=None, names=["log(P)", "Vf", "lcd", "pld", "n1"])
-        msk                          = np.random.rand(len(n1_data)) < (1-train_fraction)
+        msk                          = np.random.rand(len(ml_obj.n1_data)) < (1-train_fraction)
         ml_obj.X_tr, ml_obj.y_tr     = ml_obj.n1_data[~msk][['log(P)', 'Vf', 'lcd', 'pld']].as_matrix(), ml_obj.n1_data[~msk][['n1']].as_matrix()
         ml_obj.X_test, ml_obj.y_test = ml_obj.n1_data[msk][['log(P)', 'Vf', 'lcd', 'pld']].as_matrix(), ml_obj.n1_data[msk][['n1']].as_matrix()
-        ml_obj.fit(ml_obj.X_tr, ml_obj.y_tr)
+        ml_obj.gp.fit(ml_obj.X_tr, ml_obj.y_tr)
         ml_obj.X_test, ml_obj.y_test = ml_obj.n1_data[msk][['log(P)', 'Vf', 'lcd', 'pld']].as_matrix(), ml_obj.n1_data[msk][['n1']].as_matrix()
         return ml_obj

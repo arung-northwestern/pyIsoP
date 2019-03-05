@@ -13,7 +13,7 @@ class predictors:
     def __init__(self):
         pass
 
-    def predict_isotherm(self, T, pressures, vf, hist_obj, n1, epsilon=36.7, MA=2.0, theta=0.0):
+    def predict_isotherm( T, pressures, vf, hist_obj, n1, epsilon=36.7, MA=2.0, theta=0.0):
         """ Description
         
         Calculates the adsorption isotherm using the fundamental equation of adsorption with the pressures, energy histogram, the void fraction

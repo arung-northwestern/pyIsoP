@@ -58,29 +58,31 @@ class writer:
 
         :rtype:
         """
+        import imp
+        xyz_mod = imp.load_source('xyz', 'xyz.py')  # A single file to make xyz file writing easy
 
         import numpy as np
         f1                                                           = open(path_to_file, 'w')
         out_coord                                                    = np.zeros((np.shape(grid_obj.coord)))
         out_coord                                                    = np.dot(A, grid_obj.coord.T).T
-        xyz_mod.write_xyz(f1, out_coord, title=stripped+'.xyz', atomtypes=grid_obj.mof_atm_names)
+        xyz_mod.write_xyz(f1, out_coord, title=path_to_file, atomtypes=grid_obj.mof_atm_names)
         f1.close()
 
     # * Energy values as an array
     def write_energy_values(grid_obj, path_to_file):
         import numpy as np
 
-    """ Description
-    :type grid_obj: instance of the grid3D class
-    :param grid_obj: Contains all the info regarding the energy grid
+        """ Description
+        :type grid_obj: instance of the grid3D class
+        :param grid_obj: Contains all the info regarding the energy grid
 
-    :type path_to_file: str
-    :param path_to_file: path to the output file including full file name and extension.
+        :type path_to_file: str
+        :param path_to_file: path to the output file including full file name and extension.
 
-    :raises:
+        :raises:
 
-    :rtype: Just writes the file.
-    """
+        :rtype: Just writes the file.
+        """
         f1                                                           = open(path_to_file, 'wb')  #
         e_vals                                                       = np.reshape(grid_obj.pot_repeat, (grid_obj.N_grid_total, 1), order='C')  # grid to a vector of values
         np.savetxt(f1, e_vals)
@@ -111,7 +113,7 @@ class writer:
         cartesian_coord                                              = np.dot(grid_obj.A, grid_points.T).T
         grid_data                                                    = np.hstack((cartesian_coord, e_vals))
         f1                                                           = open(path_to_file, 'wb')
-        np.savetxt(f4, grid_data)
+        np.savetxt(f1, grid_data)
         f1.close()
 
     # * Write the grid to vtk in unstructured points format
@@ -185,3 +187,35 @@ class writer:
         energy                                                       = data.E
 
         pointsToVTK(output_file, x, y, z, data={"energy": energy})
+
+    
+    # * Function to write the detected energy minima as an xyz file for visualization
+    def write_minima(grid_obj, minima_positions, path_to_file):
+        
+    
+        """ Description
+        :type grid_obj: Instance of the grid3D class
+        :param grid_obj: The gird object of the material you want the minima printed out of
+    
+        :type minima_positions: array of floats of shape (3,number_of_local_minima) from  the detect local minima function
+        :param minima_positions: contains the i,j,k indices of all the local minima 
+    
+        :type path_to_file: str
+        :param path_to_file: path ot the output xyz file
+    
+        :raises:
+    
+        :rtype: Nothing, just writes the file.
+        """
+        import imp
+        import numpy as np
+        # Create the output coordinates by stacking the x, y and z of the minima positions
+        out_coord = np.column_stack(
+            (grid_obj.x[minima_positions], grid_obj.y[minima_positions], grid_obj.z[minima_positions]))
+
+        xyz_mod   = imp.load_source('xyz', 'xyz.py')  # A single file to make xyz file writing easy
+        f1        = open(path_to_file, 'w')
+        xyz_mod.write_xyz(f1, out_coord, title=path_to_file, atomtypes='X')
+        f1.close()
+
+        
