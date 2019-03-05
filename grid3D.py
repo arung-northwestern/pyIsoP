@@ -121,8 +121,33 @@ class grid3D(object):
         self.nx_total = int(self.nx*self.nx_cells)
         self.ny_total = int(self.ny*self.ny_cells)
         self.nz_total = int(self.nz*self.nz_cells)
-
+        
         self.N_grid_total = self.nx_total * self.ny_total * self.nz_total
+
+
+        # Create the xgrid ygrid and zgrid for future use
+        dx, dy, dz = 1.0/self.nx_total, 1.0/self.ny_total, 1.0/self.nz_total
+        # self.X = np.arange(0, 1 + 0.1*dx, dx, dtype='float64')
+        # self.Y = np.arange(0, 1 + 0.1*dy, dy, dtype='float64')
+        # self.Z = np.arange(0, 1 + 0.1*dz, dz, dtype='float64')
+        self.X = np.linspace(0, 1, self.nx_total)
+        self.Y = np.linspace(0, 1, self.ny_total) 
+        self.Z = np.linspace(0, 1, self.nz_total) 
+        self.x = np.zeros((self.nx_total, self.ny_total, self.nz_total))
+        self.y = np.zeros((self.nx_total, self.ny_total,self.nz_total))
+        self.z = np.zeros((self.nx_total, self.ny_total, self.nz_total))
+        for k in range(self.nz_total):
+                for j in range(self.ny_total):
+                        for i in range(self.nx_total):
+                                self.x[i, j, k] = self.X[i]
+                                self.y[i, j, k] = self.Y[j]
+                                self.z[i, j, k] = self.Z[k]
+        for k in range(self.nz_total):
+                for j in range(self.ny_total):
+                        for i in range(self.nx_total):
+                                [self.x[i, j, k], self.y[i, j, k], self.z[i, j, k]] = np.dot(
+                                    self.A, [self.x[i, j, k], self.y[i, j, k], self.z[i, j, k]])
+      
 
     # * Calculate the energy grid
     def grid_calc(grid_obj, potential_name, ff_obj, rmass=None, T=None):
@@ -157,9 +182,9 @@ class grid3D(object):
                 pbc_vec                        = np.dot(grid_obj.A, diff_vec.T).T
                 rsq                            = np.sum(pbc_vec**2, axis=1)
                 if potential_name              == 'lj':
-                  E                            = np.sum(potential_form(ff_obj.epsilon_array, ff_obj.sigma_array, rsq))
+                  E                            = np.sum(potential_form(rsq, ff_obj.epsilon_array, ff_obj.sigma_array))
                 elif potential_name            == 'ljfh' and T is not None and rmass is not None:
-                  E                            = np.sum(potential_form(ff_obj.epsilon_array, ff_obj.sigma_array, rsq, rmass, T))
+                  E                            = np.sum(potential_form(rsq, ff_obj.epsilon_array, ff_obj.sigma_array, rmass, T))
                 elif potential_name            == 'ljfh' and ((T is None) or (rmass is None)):
                       raise TypeError('Missing T and rmass for Feynman-Hibbs correction')
                 else:
@@ -169,3 +194,93 @@ class grid3D(object):
 
           grid_obj.pot_repeat = np.tile(grid_obj.pot,(grid_obj.nx_cells, grid_obj.ny_cells, grid_obj.nz_cells,))
           return grid_obj
+
+    # * Interpolate the energy grid using scipy's RegularGridInterpolator
+    def GridInterpolator(grid_obj):
+    
+      """ Description
+      :type grid_obj: instance of the grid3D class
+      :param grid_obj: contains all the information regarding the energy grid used in isotherm prediction
+    
+      :raises:
+    
+      :rtype: An interpolator function of the type RegularGridInterpolator from scipy.interpolate
+      """ 
+      from scipy.interpolate import RegularGridInterpolator
+      # ! The interpolation is over a unit box, to use it on x, y, z transform by A_inv before using the interp
+      pot_interp = RegularGridInterpolator((grid_obj.X, grid_obj.Y, grid_obj.Z), grid_obj.pot_repeat)
+      return  pot_interp
+    
+    
+    # * Most minimization algorithms don't have PBC which is essential for us, add it in the function      
+    
+
+
+    # * Detect the local minima in the energy grid, this can be used for molecular siting
+    def detect_local_minima(grid_obj):
+          
+          # https://stackoverflow.com/questions/3684484/peak-detection-in-a-2d-array/3689710#3689710
+          """
+          Takes an array and detects the troughs using the local maximum filter.
+          Returns a boolean mask of the troughs (i.e. 1 when
+          the pixel's value is the neighborhood maximum, 0 otherwise)
+          This can be very useful in molecular siting later on.
+          """
+          import scipy.ndimage.filters as filters
+          import scipy.ndimage.morphology as morphology
+          import numpy as np
+    
+          arr = grid_obj.pot_repeat
+          
+          # define an connected neighborhood
+          # http://www.scipy.org/doc/api_docs/SciPy.ndimage.morphology.html#generate_binary_structure
+          neighborhood = morphology.generate_binary_structure(len(arr.shape),2)
+          # apply the local minimum filter; all locations of minimum value 
+          # in their neighborhood are set to 1
+          # http://www.scipy.org/doc/api_docs/SciPy.ndimage.filters.html#minimum_filter
+          local_min = (filters.minimum_filter(arr, footprint=neighborhood)==arr)
+          # local_min is a mask that contains the peaks we are 
+          # looking for, but also the background.
+          # In order to isolate the peaks we must remove the background from the mask.
+          # 
+          # we create the mask of the background
+          background = (arr==0)
+          # 
+          # a little technicality: we must erode the background in order to 
+          # successfully subtract it from local_min, otherwise a line will 
+          # appear along the background border (artifact of the local minimum filter)
+          # http://www.scipy.org/doc/api_docs/SciPy.ndimage.morphology.html#binary_erosion
+          eroded_background = morphology.binary_erosion(
+              background, structure=neighborhood, border_value=1)
+          # 
+          # we obtain the final mask, containing only peaks, 
+          # by removing the background from the local_min mask
+          detected_minima = local_min - eroded_background
+          return np.where(detected_minima)   
+    
+    def find_minima(grid_obj):
+
+      """ Description
+      Finds the locations and energy of the local minima from a pretabulated energy grid object
+      
+      :type grid_obj: instance of the grid3D class
+      :param grid_obj: contains all the information regarding the energy grid 
+
+      :raises:
+
+      :rtype: coordinates of the minima (array of floats), energy of the minima (array of floats)
+      """
+      import numpy as np
+      import grid3D
+
+      lm         = grid3D.grid3D.detect_local_minima(grid_obj)
+      out_coord  = np.column_stack((grid_obj.x[lm], grid_obj.y[lm], grid_obj.z[lm]))
+      pot_interp = grid3D.grid3D.GridInterpolator(grid_obj)
+      en         = []
+      for i in range(len(out_coord)):
+        point    = np.dot(grid_obj.A_inv, out_coord[i])
+        en.append(pot_interp(np.around(point, decimals=3)))
+      #en_neg=en[en<0]
+      #min_neg=out_coord[en<0]
+
+      return out_coord, en
