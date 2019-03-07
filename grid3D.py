@@ -17,7 +17,7 @@ class grid3D(object):
     """
  
     # * Initialize the grid object
-    def __init__(self, cif_file, spacing=1.0, cutoff=12.8):
+    def __init__(self, cif_file, spacing=1.0, cutoff=12.8, index=None):
         """ Description
         Function to initiate the grid3D class object.
 
@@ -36,25 +36,36 @@ class grid3D(object):
         :rtype: Returns an instance of the class grid3D
         """
         import numpy as np
-        from pymatgen.io.cif import CifParser
+        # from pymatgen.io.cif import CifParser
+        from ase.io import read, write
         self.file                              = cif_file
         self.spacing                           = spacing
         self.cutoff                            = cutoff
-        f1                                     = CifParser(cif_file)
-        struct                                 = f1.get_structures(primitive=False)[0]
+        #f1                                     = CifParser(cif_file)
+        frame = read(cif_file,index=None)
+        #struct                                 = f1.get_structures(primitive=False)[0]
 
         # Need the box lengths to ensure the distance criterion
         # Create the cell matrix to ensure this criterion
 
-        la                                     = struct.lattice.a
-        lb                                     = struct.lattice.b
-        lc                                     = struct.lattice.c
+        # la                                     = struct.lattice.a
+        # lb                                     = struct.lattice.b
+        # lc                                     = struct.lattice.c
 
-        alpha                                  = struct.lattice.alpha * (np.pi/180.0)
-        beta                                   = struct.lattice.beta * (np.pi/180.0)
-        gamma                                  = struct.lattice.gamma * (np.pi/180.0)
-        vol                                    = struct.volume
+        # alpha                                  = struct.lattice.alpha * (np.pi/180.0)
+        # beta                                   = struct.lattice.beta * (np.pi/180.0)
+        # gamma                                  = struct.lattice.gamma * (np.pi/180.0)
+        # vol                                    = struct.volume
+        # Need the box lengths to ensure the distance criterion
+        # Create the cell matrix to ensure this criterion
 
+        la = frame.get_cell_lengths_and_angles()[0]
+        lb = frame.get_cell_lengths_and_angles()[1]     
+        lc = frame.get_cell_lengths_and_angles()[2]
+        alpha = frame.get_cell_lengths_and_angles()[3] * (np.pi/180.0)
+        beta = frame.get_cell_lengths_and_angles()[4] * (np.pi/180.0)
+        gamma = frame.get_cell_lengths_and_angles()[5] * (np.pi/180.0)
+        vol = frame.get_volume()
         eA                                     = [la, 0, 0]
         eB                                     = [lb*np.cos(gamma), lb*np.sin(gamma), 0]
         eC                                     = [lc*np.cos(beta), lc*(np.cos(alpha)-np.cos(beta)*np.cos(gamma))/np.sin(gamma), vol/(la*lb*np.sin(gamma))]
@@ -78,18 +89,31 @@ class grid3D(object):
         self.ny_cells                          = int(np.ceil(2.0*self.cutoff/self.ly_unit))
         self.nz_cells                          = int(np.ceil(2.0*self.cutoff/self.lz_unit))
 
-        struct.make_supercell([self.nx_cells, self.ny_cells, self.nz_cells])  # Structure is made into a super cell
-        self.coord                             = np.array(struct.frac_coords)  # The whole thing scaled to [0,1] in all D's
-        self.number_of_atoms                   = struct.num_sites
+        frame_repeat = frame.repeat([self.nx_cells, self.ny_cells, self.nz_cells])
+        #struct.make_supercell([self.nx_cells, self.ny_cells, self.nz_cells])  # Structure is made into a super cell
+        
+        #self.coord                             = np.array(struct.frac_coords)  # The whole thing scaled to [0,1] in all D's
+        self.coord = frame_repeat.get_scaled_positions()  # The whole thing scaled to [0,1] in all D's
+
+        #self.number_of_atoms                   = struct.num_sites
+        self.number_of_atoms = frame_repeat.get_number_of_atoms()
 
         # Redefine the box matrix since we made a supercell
-        self.la                                = struct.lattice.a
-        self.lb                                = struct.lattice.b
-        self.lc                                = struct.lattice.c
-        self.alpha                             = struct.lattice.alpha * (np.pi/180.0)
-        self.beta                              = struct.lattice.beta * (np.pi/180.0)
-        self.gamma                             = struct.lattice.gamma * (np.pi/180.0)
-        self.vol                               = struct.volume
+        # self.la                                = struct.lattice.a
+        # self.lb                                = struct.lattice.b
+        # self.lc                                = struct.lattice.c
+        # self.alpha                             = struct.lattice.alpha * (np.pi/180.0)
+        # self.beta                              = struct.lattice.beta * (np.pi/180.0)
+        # self.gamma                             = struct.lattice.gamma * (np.pi/180.0)
+        # self.vol                               = struct.volume
+
+        self.la = frame_repeat.get_cell_lengths_and_angles()[0]
+        self.lb = frame_repeat.get_cell_lengths_and_angles()[1]
+        self.lc = frame_repeat.get_cell_lengths_and_angles()[2]
+        self.alpha = frame_repeat.get_cell_lengths_and_angles()[3] * (np.pi/180.0)
+        self.beta = frame_repeat.get_cell_lengths_and_angles()[4] * (np.pi/180.0)
+        self.gamma = frame_repeat.get_cell_lengths_and_angles()[5] * (np.pi/180.0)
+        self.vol = frame_repeat.get_volume()
 
         self.A                                 = [[self.la, 0, 0], [self.lb*np.cos(gamma), self.lb*np.sin(gamma), 0], [self.lc*np.cos(beta), self.lc *
                                                                                        (np.cos(alpha)-np.cos(beta)*np.cos(gamma))/np.sin(gamma), self.vol/(self.la*self.lb*np.sin(gamma))]]
@@ -113,7 +137,8 @@ class grid3D(object):
         # Get atom names in the MOF
         self.mof_atm_names                     = []
         for i in range(self.number_of_atoms):
-                self.mof_atm_names.append(str(struct.species[i]))
+                # self.mof_atm_names.append(str(struct.species[i]))
+                self.mof_atm_names.append(frame_repeat.get_chemical_symbols()[i])
 
         self.pot                               = np.zeros((self.nx, self.ny, self.nz))
         self.pot_repeat                        = np.tile(self.pot, (self.nx_cells, self.ny_cells, self.nz_cells))
@@ -283,4 +308,7 @@ class grid3D(object):
       #en_neg=en[en<0]
       #min_neg=out_coord[en<0]
 
-      return out_coord, en
+      return np.array(out_coord), np.array(en)
+
+        
+            
