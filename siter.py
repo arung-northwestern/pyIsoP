@@ -47,15 +47,18 @@ class siter():
         self.potential='lj'
         self.method=optim_method
         self.index=model_number
+        self.assign=[]
+        self.warning=[]
+        self.dist = []
 
-    def  molecule2minima(siter):
+    def  molecule2minima(siter_obj):
         
     
         """ Description
         Assigns molecule to the nearest minima for siting analyzes
         
-        :type siter: instance of the grid 3D class
-        :param siter:contains all the information regarding the siting analysis
+        :type siter_obj: instance of the grid 3D class
+        :param siter_obj:contains all the information regarding the siting analysis
     
         :raises:
     
@@ -82,7 +85,7 @@ class siter():
         # t2                         = grid3D.grid3D.grid_calc(t1, siter.potential, f1) # Calculate grid
         #
         print("Step 1: Calculating the Local minima")
-        t2                           = siter.grid
+        t2                           = siter_obj.grid
         lm                           = grid3D.grid3D.detect_local_minima(t2)  # detect minima
         min_coord                    = np.column_stack((t2.x[lm], t2.y[lm], t2.z[lm]))
         print("Step 2: Interpolating the energy grid")
@@ -93,14 +96,14 @@ class siter():
         print("Step 3: Reading RASPA output")
 
         # * Read the RASPA output
-        data                         = read(siter.comp, index=siter.index)
+        data                         = read(siter_obj.comp, index=siter_obj.index)
         coord                        = data.get_positions()
         n_atoms                      = data.get_number_of_atoms()
-        number_of_molecules          = int(n_atoms/siter.nguest)
+        number_of_molecules          = int(n_atoms/siter_obj.nguest)
 
         print("Step 4: Starting minimizations")
         if number_of_molecules       == 0:
-            print('WARNING:No molecules in configuration '+str(siter.index))
+            print('WARNING:No molecules in configuration '+str(siter_obj.index))
         else:
             assign_array             = np.zeros((n_atoms, 1))  # See if we can successfully classify the beads
             warning_array            = np.zeros((n_atoms, 1))
@@ -117,13 +120,19 @@ class siter():
                 diff_u               = diff_u-np.round(diff_u)
                 true_vec             = np.dot(t2.A, diff_u.T).T
                 rsq                  = np.sum(true_vec**2, axis=1)
-                assign_array[i]      = np.argsort(rsq)[0]  # * Minima at the shortest distance is saved
-                short_dist[i]        = np.sort(rsq)[0] > 4.0
+                assign_array[i]      = np.int(np.argsort(rsq)[0])  # * Minima at the shortest distance is saved
+                short_dist[i]        = np.sort(rsq)[0]
                 if np.sort(rsq)[0] > 4.0:
                     warning_array[i] = 1
 
         print("Final Step(5): Printing the assignments and warnings")
         # symbols=np.reshape(np.array(['C']*n_atoms).T,(n_atoms,1))
         #out=np.hstack((coord, assign_array,warning_array))
-        #np.savetxt(str(siter.index)+'_assign.xyz',out)
-        return assign_array, warning_array, short_dist
+        #np.savetxt(str(siter_obj.index)+'_assign.xyz',out)
+        siter_obj.assign = np.array(assign_array)
+        siter_obj.warning = np.array(warning_array)
+        siter_obj.dist = np.array(np.sqrt(short_dist))
+        return siter_obj
+
+        
+
