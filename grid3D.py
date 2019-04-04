@@ -29,7 +29,11 @@ class grid3D(object):
     
         :type cutoff: float
         :param cutoff: The LJ cut off distance in angstrom, the default is 12.8
-    
+
+
+        :type index: int
+        :param index: model number if you're using .pdb file
+        
         :raises:
         ValueError: The cut-off and the spacing cannot be zero.
     
@@ -172,6 +176,8 @@ class grid3D(object):
                         for i in range(self.nx_total):
                                 [self.x[i, j, k], self.y[i, j, k], self.z[i, j, k]] = np.dot(
                                     self.A, [self.x[i, j, k], self.y[i, j, k], self.z[i, j, k]])
+        self.ase = frame_repeat
+        self.pot_sphere=[]
       
 
     # * Calculate the energy grid
@@ -194,11 +200,12 @@ class grid3D(object):
           """
           import numpy as np
           import potentials
+          from tqdm import tqdm
           p                                    = potentials.potentials()
           # * Used the string input to choose which function to call. This is cool
-          print(potential_name)
+          #print(potential_name)
           potential_form                       = getattr(p, str(potential_name))
-          for k in range(grid_obj.nz):
+          for k in tqdm(range(grid_obj.nz),desc='Calculating grid: Current Z position' ):
             for j in range(grid_obj.ny):
               for i in range(grid_obj.nx):
                 grid_point                     = np.array([grid_obj.x_grid[i], grid_obj.y_grid[j], grid_obj.z_grid[k]])

@@ -25,7 +25,7 @@ class predictors:
         :param T: Adsorption temperature
 
         :type pressures: numpy array of floats
-        :param pressures: Adsorption pressures
+        :param pressures: Adsorption pressures in bar
     
         :type vf: float 
         :param vf: void fraction of the material, needed for the saturation loading
@@ -52,6 +52,7 @@ class predictors:
         :rtype: An array of adsorption loading in g/L
         """
         import scipy.integrate as intg
+        import numpy as np
         R=8.314
         saturation_loading = 70.8 * vf
         Ered               = hist_obj.E/T

@@ -28,7 +28,7 @@ class forcefields:
                 :param epsilon: Lennard Jones well-depth
 
                 :raises: if Feynman Hibbs is true and the mass is not provided in mixing_rules.def, it will throw up an index error.
-
+  
                 :rtype: Force field object containing all the cross interaction parameters for a given cif file after MIC
                 """
                 import numpy as np

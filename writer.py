@@ -63,8 +63,8 @@ class writer:
 
         import numpy as np
         f1                                                           = open(path_to_file, 'w')
-        out_coord                                                    = np.zeros((np.shape(grid_obj.coord)))
-        out_coord                                                    = np.dot(A, grid_obj.coord.T).T
+        out_coord                                                    = grid_obj.coord + 0.5 # Shift all to a (0,1) box instead of (-0.5,+0.5) box
+        out_coord                                                    = np.dot(grid_obj.A, out_coord.T).T
         xyz_mod.write_xyz(f1, out_coord, title=path_to_file, atomtypes=grid_obj.mof_atm_names)
         f1.close()
 
@@ -123,7 +123,7 @@ class writer:
         :param grid_obj: Contains all the info regarding the energy grid
 
         :type path_to_file: str
-        :param path_to_file: path to the output file including full file name and extension.
+        :param path_to_file: path to the output file including full file name and no extension.
 
         :raises:
 
@@ -131,7 +131,7 @@ class writer:
         """
 
         import numpy as np
-        from pyevtk.hl import pointsToVTK
+        from evtk.hl import gridToVTK
 
         # For we need the grid x, y, z, E style
         # Define the crazy unstructured grid
@@ -155,7 +155,7 @@ class writer:
                                 [x[i, j, k], y[i, j, k], z[i, j, k]] = np.dot(
                                     grid_obj.A, [x[i, j, k], y[i, j, k], z[i, j, k]])
         #Write pot into .vts file
-        pointsToVTK(path_to_file, x, y, z, pointData={"Potential": grid_obj.pot_repeat})
+        gridToVTK(path_to_file, x, y, z, pointData={"Potential": grid_obj.pot_repeat})
 
     # * Converts the RASPA grid file into a vtk file, excluding the derivatives.
     def RASPA2vts(input_file, output_file):
@@ -176,7 +176,7 @@ class writer:
         import numpy as np
         import os
         import pandas as pd
-        from pyevtk.hl import pointsToVTK
+        from evtk.hl import pointstoVTK
 
         data                                                         = pd.read_csv(input_file, delim_whitespace=True, header=None,names=['x', 'y', 'z', 'E', 'dEx', 'dEy', 'dEz'])
         
@@ -186,14 +186,15 @@ class writer:
         z                                                            = data.z
         energy                                                       = data.E
 
-        pointsToVTK(output_file, x, y, z, data={"energy": energy})
+        pointToVTK(output_file, x, y, z, pointData={"energy": energy})
 
     
     # * Function to write the detected energy minima as an xyz file for visualization
-    def write_minima(grid_obj, minima_positions, path_to_file):
+    def write_minima(grid_obj, path_to_file):
         
     
         """ Description
+        Writes all the minima which are negative in energy to a xyz file
         :type grid_obj: Instance of the grid3D class
         :param grid_obj: The gird object of the material you want the minima printed out of
     
@@ -209,13 +210,38 @@ class writer:
         """
         import imp
         import numpy as np
-        # Create the output coordinates by stacking the x, y and z of the minima positions
-        out_coord = np.column_stack(
-            (grid_obj.x[minima_positions], grid_obj.y[minima_positions], grid_obj.z[minima_positions]))
+        import grid3D
+        xyz_mod = imp.load_source('xyz', 'xyz.py')  # A single file to make xyz file writing easy
 
-        xyz_mod   = imp.load_source('xyz', 'xyz.py')  # A single file to make xyz file writing easy
-        f1        = open(path_to_file, 'w')
-        xyz_mod.write_xyz(f1, out_coord, title=path_to_file, atomtypes='X')
-        f1.close()
-
+        min_, en_ = grid3D.grid3D.find_minima(grid_obj)
         
+        f1        = open(path_to_file, 'w')
+        min_neg   = min_[np.reshape(en_<0,(len(en_),))]
+        xyz_mod.write_xyz(f1, min_neg, title='minima', atomtypes='X')
+        f1.close()
+    # * Write the repeated framework coordinates into which ever format you want using ASE
+    def write_frame(grid_obj,path_to_file):
+
+        """ Description
+        :type grid_obj:instance of the grid3D class
+        :param grid_obj: contains all the information regarding the grid calculation
+        :type path_to_file: str
+        :param path_to_file: path of the output file including the full extension 
+        :raises:
+        :rtype: None, just writes the framework coordinates in desired format
+        """
+        from ase.io import write
+        write(path_to_file,grid_obj.ase)
+    
+    def write_siter(siter_obj, path_to_file):
+        from ase.io import read
+        import numpy as np
+        data=read(siter_obj.comp,index=siter_obj.index)
+        out_data=np.column_stack((data.get_chemical_symbols(),data.get_positions(),siter_obj.assign))
+        f1=open(path_to_file,'wb')
+        #f1.write(b str(data.get_number_of_atoms()))
+        f1.write(b'\n')
+        f1.write(b'\n')
+
+        np.savetxt(f1,out_data, fmt='%s')
+        f1.close() 
