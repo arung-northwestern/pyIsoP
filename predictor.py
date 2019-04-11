@@ -1,12 +1,13 @@
 class predictors:
+    
+    #*######  ######  ####### ######  ###  #####  ####### ####### ######
+    #*#     # #     # #       #     #  #  #     #    #    #     # #     #
+    #*#     # #     # #       #     #  #  #          #    #     # #     #
+    #*######  ######  #####   #     #  #  #          #    #     # ######
+    #*#       #   #   #       #     #  #  #          #    #     # #   #
+    #*#       #    #  #       #     #  #  #     #    #    #     # #    #
+    #*#       #     # ####### ######  ###  #####     #    ####### #     #
     """
-    ######  ######  ####### ######  ###  #####  ####### ####### ######
-    #     # #     # #       #     #  #  #     #    #    #     # #     #
-    #     # #     # #       #     #  #  #          #    #     # #     #
-    ######  ######  #####   #     #  #  #          #    #     # ######
-    #       #   #   #       #     #  #  #          #    #     # #   #
-    #       #    #  #       #     #  #  #     #    #    #     # #    #
-    #       #     # ####### ######  ###  #####     #    ####### #     #
     * Takes in a set of pressures, void fraction, energy histogram and the first-shell coordination (n1) and predicts the adsorption isotherm
     """
     import numpy as np
@@ -14,7 +15,7 @@ class predictors:
         pass
 
     def predict_isotherm( T, pressures, vf, hist_obj, n1, epsilon=36.7, MA=2.0, theta=0.0):
-        """ Description
+        """ 
         
         Calculates the adsorption isotherm using the fundamental equation of adsorption with the pressures, energy histogram, the void fraction
         of the material and the first shell coordination numbers of hydrogen in the material at the pressures of interest, as the inputs.
@@ -47,7 +48,7 @@ class predictors:
         :param MA: Molecular weight of hydrogen
     
     
-        :raises:
+        :raises: None
     
         :rtype: An array of adsorption loading in g/L
         """

@@ -1,13 +1,13 @@
 class siter():
+    
+    #* #####  ### ####### ####### ######
+    #*#     #  #     #    #       #     #
+    #*#        #     #    #       #     #
+    #* #####   #     #    #####   ######
+    #*      #  #     #    #       #   #
+    #*#     #  #     #    #       #    #
+    #* #####  ###    #    ####### #     #
     """
-     #####  ### ####### ####### ######
-    #     #  #     #    #       #     #
-    #        #     #    #       #     #
-     #####   #     #    #####   ######
-          #  #     #    #       #   #
-    #     #  #     #    #       #    #
-     #####  ###    #    ####### #     #
-
     * Contains the subroutine to assign molecule beads to minima inside a MOF
     
     """
@@ -15,8 +15,9 @@ class siter():
     def __init__(self, grid_obj, path_to_component_pdb, ntoms_gas, spacing=1.0, model_number=0, optim_method='l-bfgs-b'):
         self.grid=grid_obj
     
-        """ Description
+        """ 
         Initializes the siter object
+
         :type grid_obj: instance of the grid 3D class
         :param grid_obj: contains all the information regarding the grid
     
@@ -54,7 +55,7 @@ class siter():
     def  molecule2minima(siter_obj):
         
     
-        """ Description
+        """ 
         Assigns molecule to the nearest minima for siting analyzes
         
         :type siter_obj: instance of the grid 3D class

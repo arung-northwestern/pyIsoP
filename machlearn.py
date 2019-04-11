@@ -1,21 +1,21 @@
 class machlearn:
 
-    """
-    #     #    #     #####  #     # ### #     # #######    #       #######    #    ######  #     #
-    ##   ##   # #   #     # #     #  #  ##    # #          #       #         # #   #     # ##    #
-    # # # #  #   #  #       #     #  #  # #   # #          #       #        #   #  #     # # #   #
-    #  #  # #     # #       #######  #  #  #  # #####      #       #####   #     # ######  #  #  #
-    #     # ####### #       #     #  #  #   # # #          #       #       ####### #   #   #   # #
-    #     # #     # #     # #     #  #  #    ## #          #       #       #     # #    #  #    ##
-    #     # #     #  #####  #     # ### #     # #######    ####### ####### #     # #     # #     #
 
+    #* #     #    #     #####  #     # ### #     # #######    #       #######    #    ######  #     #
+    #* ##   ##   # #   #     # #     #  #  ##    # #          #       #         # #   #     # ##    #
+    #* # # # #  #   #  #       #     #  #  # #   # #          #       #        #   #  #     # # #   #
+    #* #  #  # #     # #       #######  #  #  #  # #####      #       #####   #     # ######  #  #  #
+    #* #     # ####### #       #     #  #  #   # # #          #       #       ####### #   #   #   # #
+    #* #     # #     # #     # #     #  #  #    ## #          #       #       #     # #    #  #    ##
+    #* #     # #     #  #####  #     # ### #     # #######    ####### ####### #     # #     # #     #
+    """
     Contains code to train the machine learning model to predict the first shell coordination nunber using Gaussian Process Regression (GPR)
     * Features : logarithm_10 of pressure [log(P)], void fraction (VF), largest cavity dia (LCD), pore limiting dia. (PLD)
     * refer to the documentation page for the format of the training data
     """
     def __init__(self, scale=0.5, bounds=(0.1,10.0), restarts=10):
     
-        """ Description
+        """ 
         Initialize Gaussian Process Regression (GPR) model for predicting the first shell coordination number as a function of 
         logarithm_10 of pressure [log(P)], void fraction (VF), largest cavity dia (LCD) and  pore limiting dia. (PLD). 
         DEFAULTS: The kernel used is RationalQuadratic with length scale=0.5 with lengths bounded by (0.1,10) and 10 optimizer restarts.
@@ -40,6 +40,7 @@ class machlearn:
         :raises:
     
         :rtype: An instance of the machlearn class.
+
         """    
         from sklearn.gaussian_process.kernels import RationalQuadratic
         from sklearn.gaussian_process import GaussianProcessRegressor
@@ -59,7 +60,7 @@ class machlearn:
 
     def GPR4n1(ml_obj, data_file, train_fraction):
         
-        """ Description
+        """ 
         Quick and easy default function to train and test the Gaussian Process Regression (GPR) model for predicting the first shell coordination number as a function of 
         logarithm_10 of pressure [log(P)], void fraction (VF), largest cavity dia (LCD) and  pore limiting dia. (PLD). 
         DEFAULTS: The kernel used is RationalQuadratic with length scale=0.5 with lengths bounded by (0.1,10) and 10 optimizer restarts.
@@ -87,6 +88,7 @@ class machlearn:
         :raises:
     
         :rtype: An update instance of the machlearn class
+        
         """    
         import pandas as pd
         import numpy as np

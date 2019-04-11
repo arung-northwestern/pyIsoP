@@ -1,13 +1,15 @@
 class writer:
-    """
-    #     # ######  ### ####### ####### ######
-    #  #  # #     #  #     #    #       #     #
-    #  #  # #     #  #     #    #       #     #
-    #  #  # ######   #     #    #####   ######
-    #  #  # #   #    #     #    #       #   #
-    #  #  # #    #   #     #    #       #    #
-    ## ##  #     # ###    #    ####### #     #
     
+    #*#     # ######  ### ####### ####### ######
+    #*#  #  # #     #  #     #    #       #     #
+    #*#  #  # #     #  #     #    #       #     #
+    #*#  #  # ######   #     #    #####   ######
+    #*#  #  # #   #    #     #    #       #   #
+    #*#  #  # #    #   #     #    #       #    #
+    #*## ##  #     # ###    #    ####### #     #
+    
+    """
+
     * Contains all the functions required to write out the details of the grid, vtk, coordinates in xyz, isotherm data and whatever
     * Most of these functions operate on the grid3D object after computation.
     ! Check citation for xyz.py file 
@@ -24,8 +26,9 @@ class writer:
 
     # * Details of the energy grid
     def write_details(grid_obj, path_to_file):
-        """ Description
+        """ 
         Reads in the grid3D object after calculation and writes out the important details into a named file
+        
         :type grid_obj: An instance of the class grid3D
         :param grid_obj: grid3D object after calculation
 
@@ -46,8 +49,9 @@ class writer:
 
     # * Framework coordinates in xyz
     def write_xyz(grid_obj, path_to_file):
-        """ Description
+        """ 
         Reads in the grid3D object after calculation and writes out the important details into an xyz file for visualization
+        
         :type grid_obj: An instance of the class grid3D
         :param grid_obj: grid3D object after calculation
 
@@ -72,7 +76,9 @@ class writer:
     def write_energy_values(grid_obj, path_to_file):
         import numpy as np
 
-        """ Description
+        """ 
+        Uses numpy's savetxt to write theenergy values as a vector.
+
         :type grid_obj: instance of the grid3D class
         :param grid_obj: Contains all the info regarding the energy grid
 
@@ -90,7 +96,9 @@ class writer:
 
     # * Energy values in x, y, z, E
     def write_xyzE(grid_obj, path_to_file):
-        """ Description
+        """ 
+        Write the energy grid in x, y, z, E formatted text file.
+
         :type grid_obj: instance of the grid3D class
         :param grid_obj: Contains all the info regarding the energy grid
 
@@ -118,7 +126,9 @@ class writer:
 
     # * Write the grid to vtk in unstructured points format
     def write_vts(grid_obj, path_to_file):
-        """ Description
+        """ 
+        Write the energy grid as a binary vtk (.vts) file.
+
         :type grid_obj: instance of the grid3D class
         :param grid_obj: Contains all the info regarding the energy grid
 
@@ -161,7 +171,9 @@ class writer:
     def RASPA2vts(input_file, output_file):
         
     
-        """ Description
+        """ 
+        Convert RASPA gird file to a binary vtk (.vts) file.
+
         :type input_file: str   
         :param input_file: path to the RASPA .grid file
     
@@ -193,8 +205,9 @@ class writer:
     def write_minima(grid_obj, path_to_file):
         
     
-        """ Description
+        """ 
         Writes all the minima which are negative in energy to a xyz file
+        
         :type grid_obj: Instance of the grid3D class
         :param grid_obj: The gird object of the material you want the minima printed out of
     
@@ -222,7 +235,9 @@ class writer:
     # * Write the repeated framework coordinates into which ever format you want using ASE
     def write_frame(grid_obj,path_to_file):
 
-        """ Description
+        """ 
+        Write framework coordinates into any format supported by ase.
+
         :type grid_obj:instance of the grid3D class
         :param grid_obj: contains all the information regarding the grid calculation
         :type path_to_file: str
@@ -235,6 +250,21 @@ class writer:
     
     def write_siter(siter_obj, path_to_file):
         from ase.io import read
+    
+        """ 
+        Writes the minima assignment of beads. 
+        Element, x, y,z, assigned _minima_index
+        :type siter_obj: Instance of the siter class
+        :param siter_obj: Contains all the information on the siting study.
+    
+        :type path_to_file: str
+        :param path_to_file: Full path to the output text file with extension.
+    
+        :raises: TypeError
+    
+        :rtype: None, just writes the file.
+
+        """    
         import numpy as np
         data=read(siter_obj.comp,index=siter_obj.index)
         out_data=np.column_stack((data.get_chemical_symbols(),data.get_positions(),siter_obj.assign))

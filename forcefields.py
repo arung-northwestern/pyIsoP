@@ -1,12 +1,12 @@
 class forcefields:
+        #* #######
+        #* #        ####  #####   ####  ######    ###### # ###### #      #####   ####
+        #* #       #    # #    # #    # #         #      # #      #      #    # #
+        #* #####   #    # #    # #      #####     #####  # #####  #      #    #  ####
+        #* #       #    # #####  #      #         #      # #      #      #    #      #
+        #* #       #    # #   #  #    # #         #      # #      #      #    # #    #
+        #* #        ####  #    #  ####  ######    #      # ###### ###### #####   ####
         """
-        #######
-        #        ####  #####   ####  ######    ###### # ###### #      #####   ####
-        #       #    # #    # #    # #         #      # #      #      #    # #
-        #####   #    # #    # #      #####     #####  # #####  #      #    #  ####
-        #       #    # #####  #      #         #      # #      #      #    #      #
-        #       #    # #   #  #    # #         #      # #      #      #    # #    #
-        #        ####  #    #  ####  ######    #      # ###### ###### #####   ####
         * Houses the force field object for the grid calculation
         * Houses the function to read the force field from the RASPA format dir and mixing rules file
         ! Default params are for hydrogen from UFF
@@ -14,7 +14,8 @@ class forcefields:
         """
 
         def __init__(self, grid_obj, force_field='UFF', sigma=2.958, epsilon=36.7, feynman_hibbs=False):
-                """ Description
+                """ 
+                Initialize the force field object.
 
                 :type grid_obj: grid3D instance
 
@@ -27,7 +28,7 @@ class forcefields:
                 :type epsilon: float 
                 :param epsilon: Lennard Jones well-depth
 
-                :raises: if Feynman Hibbs is true and the mass is not provided in mixing_rules.def, it will throw up an index error.
+                :raises: if Feynman Hibbs is true and the mass is not provided in mixing_rules.def, it will throw up an IndexError.
   
                 :rtype: Force field object containing all the cross interaction parameters for a given cif file after MIC
                 """

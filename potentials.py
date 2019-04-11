@@ -1,15 +1,16 @@
 class potentials:
 
+    
+        #*######
+        #*#     #  ####  ##### ###### #    # ##### #   ##   #       ####
+        #*#     # #    #   #   #      ##   #   #   #  #  #  #      #
+        #*######  #    #   #   #####  # #  #   #   # #    # #       ####
+        #*#       #    #   #   #      #  # #   #   # ###### #           #
+        #*#       #    #   #   #      #   ##   #   # #    # #      #    #
+        #*#        ####    #   ###### #    #   #   # #    # ######  ####
+    
         """
-         ######
-         #     #  ####  ##### ###### #    # ##### #   ##   #       ####
-         #     # #    #   #   #      ##   #   #   #  #  #  #      #
-         ######  #    #   #   #####  # #  #   #   # #    # #       ####
-         #       #    #   #   #      #  # #   #   # ###### #           #
-         #       #    #   #   #      #   ##   #   # #    # #      #    #
-         #        ####    #   ###### #    #   #   # #    # ######  ####
-      
-         
+            Defines all the potentials that can be used in grid calculation. Add your favorite 2-body potentials here. 
         """
         from numba import vectorize
         def __init__(self):
@@ -18,7 +19,8 @@ class potentials:
         # * The Lennard-Jones Potential
         @vectorize(['float64(float64, float64, float64)'], target='cpu')
         def lj( rsq, epsilon, sigma): 
-            """ Description
+            """ 
+            Lennar-Jones potential
 
             :type rsq: float
             :param rsq: squared distance between atoms
@@ -33,13 +35,16 @@ class potentials:
             ValueError: rsq cannot be zero
 
             :rtype: The Lennard-Jones potential value in 'float'.
+
             """
             return (4*epsilon) * (((sigma)**12/(rsq)**6) - ((sigma)**6/(rsq)**3))
 
         # * Lennard Jones with the Feynman-Hibbs correction    
         @vectorize(['float64(float64, float64, float64, float64, float64)'], target='cpu')
         def ljfh( rsq, epsilon, sigma, rmass, T):
-            """ Description
+            """ 
+
+            Lennard-Jones Potential with Feynman-Hibbs Correction.
 
             :type rsq: float
             :param rsq: squared distance between atoms
@@ -56,11 +61,10 @@ class potentials:
             :type T: float
             :param T: Temperature in [K]
             
-            :raises: 
-            ValueError: rsq cannot be zero
-            TypeError: Provide T and rmass for Feynman Hibbs correction
+            :raises: ValueError-> rsq cannot be zero, TypeError-> Provide T and rmass for Feynman Hibbs correction
 
             :rtype: The Lennard-Jones potential value in 'float'.
+
             """
 
   
