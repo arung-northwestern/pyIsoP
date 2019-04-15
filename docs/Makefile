@@ -4,7 +4,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
-SPHINXPROJ    = pyIsoP_1.0
+SPHINXPROJ    = pyisop
 SOURCEDIR     = .
 BUILDDIR      = _build
 

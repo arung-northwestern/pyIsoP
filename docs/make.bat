@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=.
 set BUILDDIR=_build
-set SPHINXPROJ=pyIsoP_1.0
+set SPHINXPROJ=pyisop
 
 if "%1" == "" goto help
 
