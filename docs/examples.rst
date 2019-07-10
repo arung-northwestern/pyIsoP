@@ -12,7 +12,7 @@ Please refer to the corresponding API reference to find more about the modules a
 Energy Grid Calculation
 =======================
 PyIsoP uses a vectorized_ grid calculator in the :ref:`grid3D`, in conjunction with interatomic potentials in
-:ref:`potentials` and parameters in RASPA format in the :ref:`forcefields` module.  
+:ref:`potentials` and parameters in RASPA_ format in the forcefields_ module.  
 
 .. code-block:: python
        
@@ -38,7 +38,7 @@ Pore Structure Visualization
 
 The binary vtk file can be used to visualize and elucidate complex pore structures. 
 There are many softwares which can create volume and isosurface rendering from a vtk file. The image below is generated using Visit_ visualizer.
-We illustrated the complex pores of ZIF-4 using two isosurfaces at 20000 K (silver) and 0 K (brown).
+We illustrate the complex pores of ZIF-4 using two isosurfaces at 20000 K (silver) and 0 K (brown).
 
 .. figure:: ./images/zif-4.png
    :align: center
@@ -52,10 +52,10 @@ We illustrated the complex pores of ZIF-4 using two isosurfaces at 20000 K (silv
 Energy Histogram
 =========================================
 
-PyIsoP contains the :ref:`histogram` module which offers 3 ways for the user to obtain the energy histogram.  The number of bins and :math:`E_max` can be set while initializing the histogram.
-All the energies should be in the units of [K] to ensure consistency with the RASPA grid output.
+PyIsoP contains the :ref:`histogram` module which offers 3 ways for the user to obtain the energy histogram.  The number of bins and :math:`E_{max}` can be set while initializing the histogram.
+All the energies should be in the units of [K] to ensure consistency with the RASPA_ grid output.
 
-1. From the PyIsoP :ref:`grid3D` object 
+1. From the PyIsoP  :ref:`grid3D` object 
 
 .. code-block:: python
 
@@ -63,7 +63,7 @@ All the energies should be in the units of [K] to ensure consistency with the RA
         h = histo()                                     # initialize a histo object
         h = histo.grid2histo(t2, h)            # update (overwrite) the histo object with histogram calculated from the grid3D object t2  
 
-2.  Read in the energy grid from a RASPA style .grid file, with x, y, z, E data or from  .cube file. 
+2.  Read in the energy grid from a RASPA_ style .grid file, with x, y, z, E data or from  .cube file. 
 
 .. code-block:: python
 
@@ -78,7 +78,7 @@ All the energies should be in the units of [K] to ensure consistency with the RA
 
         from histo import histo                 # import the histogram module
         h = histo()                                     # initialize a histo object
-        h = histo..file2histo('text_filename.dat', h)            # update (overwrite) the histo object with histogram calculated from the RASPA grid file.
+        h = histo..file2histo('text_filename.dat', h)            # update (overwrite) the histo object with histogram calculated from the RASPA_ grid file.
 
 
 .. _machlearn:
@@ -88,7 +88,7 @@ Coordination Number from Machine Learning
 
 In order to predict the guest-guest energy of hydrogen, we use a machine learning model (GPR) trained on the first-shell coordination number.
 Please refer to :ref:`theory` section or our recent work by Gopalan *et al.*, :cite:`gopalan2019fast`  for more details. PyIsoP provides 
-a pre-trained model at 77 K which can predict the hydrogen coordination numbers as a function of  [log10(P), void fraction, largest cavity diameter (A), pore limiting diameter (A)]
+a pre-trained model at 77 K which can predict the hydrogen coordination numbers as a function of  :math:`_{10}`(P), void fraction, largest cavity diameter (A), pore limiting diameter (A)]
 
 -   To load that model (details are in the  SI of the publication :cite:`gopalan2019fast` 
 
@@ -110,7 +110,7 @@ a pre-trained model at 77 K which can predict the hydrogen coordination numbers 
 
 
 -   Preferred:  To use algorithms other than GPR, users are encouraged to train their own model and be ready to provide :math:`n_1` as a vector (array corresponding to different pressures) to be fed into
-    the :ref:`isotherm` calculation (example below) using the :ref:`predictor` .
+    the isotherm_ calculation (example below) using the predictor_ module .
 
 .. _isotherm:
 
@@ -156,3 +156,4 @@ economically feasible. Please refer to Gopalan *et al.* :ref:`gopalan2019fast` f
 
 .. _vectorized: https://numba.pydata.org/numba-doc/dev/user/vectorize.html
 .. _VisIt: https://wci.llnl.gov/simulation/computer-codes/visit/
+.. _RASPA: https://github.com/numat/RASPA2

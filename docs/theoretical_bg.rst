@@ -12,14 +12,14 @@ publication from Gopalan *et al.*, :cite:`gopalan2019fast` for more explanation.
 .. _llc:
 
 The Local Langmuir constant (:math:`K_L`)
-===============================================
+==========================================
 
 The free energy of adsorption for a spatially distinct site :math:`i`
 inside a material is given by Snurr *et al.* :cite:`snurr1994hierarchical`,
 
 .. math:: 
-   exp\Big({\frac{-A_{i}}{k_BT}}\Big)=\frac{1}{8 \pi^2V_{uc}}\int_iexp(-\frac{U_i}{k_BT})d^3rd^3\phi 
-   :label: randyFE
+  exp\Big({\frac{-A_{i}}{k_BT}}\Big)=\frac{1}{8 \pi^2V_{uc}}\int_iexp(-\frac{U_i}{k_BT})d^3rd^3\phi 
+  :label: randyFE
 
 where k\ :math:`_B` is the Boltzmann constant, and :math:`d^3r` and
 :math:`d^3 \phi` represent the integral over the space forming the site
@@ -71,7 +71,7 @@ formed by all sites of energy :math:`E_i`. Using equations :eq:`khE2` and
 .. _foa:
 
 The Fundamental Equation of adsorption
-===================================================
+==========================================
 
 Adsorption of a pure component in a nanoporous material under a given set of conditions (T,P) can
 be considered as a summation over all of its adsorption sites. Amongst all the possible ways to
@@ -115,12 +115,12 @@ where the energy :math:`E` now includes both the contributions,
    E=E^{(x,y,z)}_{guest-host}+E^{(T,P,material)}_{guest-guest}
    :label: Esplit
    
-Calculation of the guest-host and guest-guest contributions, is explained in sections :ref:`guest-host` and :ref:`guest-guest` respectively.
+Calculation of the guest-host and guest-guest contributions, is explained in sections guest-host_ and guest-guest_ respectively.
 
 .. _qst:
 
 The Saturation capacity 
-==========================
+==========================================
 For hydrogen, the saturation loading can approximated as :cite:`simon2014optimizing`,
 
 .. math::
@@ -147,7 +147,7 @@ to use with equation :eq:`fundamentalEOAETP`.
 .. _guest-guest:
 
 Guest-Guest Interactions 
-===========================================
+==========================================
 The guest-guest interaction energy of hydrogen inside a nanopore on the other hand depends upon the
 adsorption conditions (T,P) and the effects of confinement in the material. The difficulty in
 understanding phase of hydrogen inside the nanopores of a material, under different adsorption
@@ -194,7 +194,7 @@ predictions.
 .. _final:
 
 Final Form of :math:`K_L`
-=============================
+==========================================
 If we put all the pieces together, the final expression of the local Langmuir constant to be used
 in equation :eq:`fundamentalEOAETP` looks like
 
