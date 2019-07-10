@@ -36,9 +36,9 @@ PyIsoP uses a vectorized_ grid calculator in the :ref:`grid3D`, in conjunction w
 Pore Structure Visualization
 ============================
 
-Visualize the pores using the vtk file with any tool with volume rendering features to understand the pore
-structure better. The image below is generated using Visit_ visualizer.
-
+The binary vtk file can be used to visualize and elucidate complex pore structures. 
+There are many softwares which can create volume and isosurface rendering from a vtk file. The image below is generated using Visit_ visualizer.
+We illustrated the complex pores of ZIF-4 using two isosurfaces at 20000 K (silver) and 0 K (brown).
 .. image:: ./images/zif-4.png
    :align: center
    :height: 600
