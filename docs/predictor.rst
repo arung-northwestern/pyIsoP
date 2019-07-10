@@ -1,6 +1,7 @@
+.. _predictor:
+
 predictor module
 ================
-.. _predictor:
 .. automodule:: predictor
     :members:
     :undoc-members:

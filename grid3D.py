@@ -14,7 +14,7 @@ class grid3D(object):
     """
 
     # * Initialize the grid object
-    def __init__(self, cif_file, spacing=1.0, cutoff=12.8, index=None):
+    def __init__(self, cif_file, spacing=1.0, cutoff=12.8, temperature=77.0, index=None):
         """ 
         Function to initiate the grid3D class object.
 
@@ -27,6 +27,9 @@ class grid3D(object):
         :type cutoff: float
         :param cutoff: The LJ cut off distance in angstrom, the default is 12.8
 
+        :type temperature: float
+        :param temperature: Temperature at which grid is calculated. Grid has T dependence for Feynman-Hibbs and for polyatomic probe.
+    
 
         :type index: int
         :param index: model number if you're using .pdb file
@@ -173,6 +176,8 @@ class grid3D(object):
                                     self.A, [self.x[i, j, k], self.y[i, j, k], self.z[i, j, k]])
         self.ase = frame_repeat
         self.pot_sphere = []
+        self.pot_total = []
+        self.Temperature = temperature
 
     # * Calculate the energy grid
     def grid_calc(grid_obj, potential_name, ff_obj, rmass=None, T=None):

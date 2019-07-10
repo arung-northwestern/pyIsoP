@@ -1,3 +1,5 @@
+.. _forcefields:
+
 forcefields module
 ==================
 

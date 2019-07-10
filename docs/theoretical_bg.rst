@@ -1,4 +1,5 @@
-.. _theo:
+.. _theory:
+
 ===============================================================
 Theoretical Background
 ===============================================================
@@ -56,10 +57,10 @@ where :math:`Q_{sat}(E_i)` represents the overall saturation capacity
 of all sites with the energy :math:`E_i`
 
 .. math::
-   Q_{sat}(E_i)=Q_{sat}*V_f(E_i)=Q_{sat}*\frac{n(E_i)V_{cubelet}}{V}
+   Q_{sat}(E_i)=Q_{sat}*f_V(E_i)=Q_{sat}*\frac{n(E_i)V_{cubelet}}{V}
    :label: qsatE
 
-where :math:`V_f(E_i)` is the fraction of the total void volume that is
+where :math:`f_V(E_i)` is the fraction of the total void volume that is
 formed by all sites of energy :math:`E_i`. Using equations :eq:`khE2` and
 :eq:`qsatE`, equation :eq:`kl1` can be simplified to
 
@@ -79,21 +80,21 @@ guest molecule. Now the overall adsorption in the material at any given T,P is t
 over all the energetically different adsorption sites,
 
 .. math::
-   Q(T,P)=\sum_iQ_{sat}.V_f(E_i)\frac{K_L(E_i,T).P}{K_L(E_i,T).P+1}
+   Q(T,P)=\sum_iQ_{sat}.f_V(E_i)\frac{K_L(E_i,T).P}{K_L(E_i,T).P+1}
    :label: qdiscrete
 
 Now if we assume that there is a continuous distribution of such sites
 in the material, which we can think in terms of a normalized probability density :math:`\rho(E)`.
-This normalized density :math:`\rho(E)` is related to :math:`V_f(E_i)` (from equation :eq:`qsatE`), the fraction of the total void volume that is
+This normalized density :math:`\rho(E)` is related to :math:`f_V(E_i)` (from equation :eq:`qsatE`), the fraction of the total void volume that is
 formed by all sites of energy :math:`E`  as,
 
 .. math::
-   V_f(E)=\rho(E)dE
+   f_V(E)=\rho(E)dE
    :label: vfe
-
+where :math:`f_V(E)` equals the probability of finding a site of energy between :math:`E` and :math:`E+dE` (once we assume a continuous distribution)  inside the box.
 Hence the overall adsorption in the material can be expressed 
 as a continuous integral involving the saturation loading :math:`Q_{sat}`, the local Langmuir constants :math:`K_L` and the 
-density of site :math:`\rho(E)`.
+density of sites :math:`\rho(E)`.
 
 .. math::
    \frac{Q(T,P)}{Q_{sat}}=\int_{-\infty}^{\infty}\frac{K(T,E)*P}{1+K(T,E)*P}\rho(E)dE
@@ -118,7 +119,7 @@ Calculation of the guest-host and guest-guest contributions, is explained in sec
 
 .. _qst:
 
-Saturation capacity (:math:`Q_{sat}`)
+The Saturation capacity 
 ==========================
 For hydrogen, the saturation loading can approximated as :cite:`simon2014optimizing`,
 
@@ -130,7 +131,7 @@ where :math:`\rm \rho_{L,H_2}` is the liquid density of hydrogen and :math:`V_f`
 
 .. _guest-host:
 
-Guest-Host interactions (:math:`E_{guest-host}`)
+Guest-Host interactions 
 ==========================================
 
 The guest-host energy can be easily calculated by dividing the material into cubelets and
@@ -145,7 +146,7 @@ to use with equation :eq:`fundamentalEOAETP`.
 
 .. _guest-guest:
 
-Guest-Guest Interactions (:math:`E_{guest-guest}`)
+Guest-Guest Interactions 
 ===========================================
 The guest-guest interaction energy of hydrogen inside a nanopore on the other hand depends upon the
 adsorption conditions (T,P) and the effects of confinement in the material. The difficulty in
@@ -160,7 +161,7 @@ distribution function (:math:`g(r)`) of hydrogen inside a nanopore.
    n^{T,P}_1=\int_{r_0}^{r_1}4\pi r^2 dr\rho_bg(r)
    :label: n1rdf
 
-where :math:`r_0` and :math:`r_1` correspond to the range of the first peak in :math:`g(r)` and :math:`\rho_b` is the bulk number
+where :math:`r_0` and :math:`r_1` correspond to the range of the first peak in :math:`g(r)` and :math:`\rho_b` is the overll box number
 density. If we neglect all the interactions beyond the first coordination shell,
 the average guest-guest energy can then be approximated in terms
 of the first-shell coordination number and the Lennard Jones well-depth (:math:`\epsilon`) as

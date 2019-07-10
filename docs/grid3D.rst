@@ -1,3 +1,5 @@
+.. _grid3D:
+
 grid3D module
 =============
 

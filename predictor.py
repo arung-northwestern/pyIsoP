@@ -54,10 +54,10 @@ class predictors:
         """
         import scipy.integrate as intg
         import numpy as np
-        R=8.314
+        R=0.0831
         saturation_loading = 70.8 * vf
-        Ered               = hist_obj.E/T
-        RhoE               = hist_obj.RhoE
+        Ered               = hist_obj.E # This E should be dimensionless
+        RhoE               = hist_obj.RhoE # Should be consistent with dimesionless energy
         loading_predicted  = []
         for p_index in range(len(pressures)):
             p              = pressures[p_index]

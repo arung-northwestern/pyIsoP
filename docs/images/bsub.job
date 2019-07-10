@@ -1,0 +1,19 @@
+#!/bin/bash
+#PBS -N Ar_grid
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=10000:00:00
+#PBS -r n
+#PBS -o pbs.out
+#PBS -e pbs.err
+#PBS -V
+
+cd $PBS_O_WORKDIR
+
+echo START: `date`
+
+export RASPA_DIR=/home/hzhang/Git_RASPA/RASPA2/simulations
+
+$RASPA_DIR/bin/simulate $1
+
+echo FINISH: `date`
+

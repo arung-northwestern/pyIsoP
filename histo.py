@@ -17,7 +17,7 @@ class histo:
     """
 
 
-    def __init__(self, nbins=50, E_max=10, normed_flag=True):
+    def __init__(self, nbins=50, E_max=1, normed_flag=True):
         """ 
         Initializes the histogram object to store the energy histogram, unit of [K] for the energy.
 
@@ -31,7 +31,7 @@ class histo:
         :param RhoE: Normalized energy density, (area under the curve =1)
 
         :type E_max: float
-        :param E: Maximum energy where the histogram is cut off. 
+        :param E: Maximum energy where the histogram is cut off. in units of [K]
         * DEFAULT: 10 [K], doesn't change the isotherm from prior testing
     
 
@@ -67,11 +67,43 @@ class histo:
 
         hist_obj.name                                                 = grid_obj.file
         e_vals                                                        = np.reshape(grid_obj.pot_repeat, (grid_obj.N_grid_total, 1), order='C')
-        bins1                                                         = np.linspace(min(e_vals)-0.5, hist_obj.E_max, hist_obj.nbins+1)
+        e_vals  = e_vals/grid_obj.Temperature # Reduced units for energy
+        bins1                                                         = np.linspace(min(e_vals)-0.5, hist_obj.E_max/grid_obj.Temperature , hist_obj.nbins+1)
         hist_obj.RhoE, binedges1                                               = np.histogram(e_vals, bins=bins1, normed=hist_obj.normed_flag)
         bincenters                                                    = 0.5 * (binedges1[1:] + binedges1[:-1])  # Bincenters
         hist_obj.E                                                    = bincenters
         return hist_obj
+
+     # * Calculate histogram from PyIsoP grid object
+    def gridtotal2histo(grid_obj, hist_obj):
+        """ 
+        Calculate histogram from PyIsoP grid object using the total energy (bead + sphere sampling + disc sampling)
+
+        :type grid_obj: An instance of the grid3D class
+        :param grid_obj: Contains energy info on a 3D grid
+    
+        :type hist_obj: An instance of the histo class
+        :param hist_obj: Will be modified and overwritten with energy and density of sites info
+
+        :raises:
+    
+        :rtype: Modified histogram object with E and RhoE.
+        
+        """
+        import numpy as np
+        
+        hist_obj.name = grid_obj.file
+        
+        e_vals = np.reshape(grid_obj.pot_total, (grid_obj.N_grid_total, 1), order='C')
+        e_vals = e_vals/grid_obj.Temperature  # Reduced units for energy
+        bins1 = np.linspace(min(e_vals)-0.5, hist_obj.E_max/grid_obj.Temperature , hist_obj.nbins+1)
+        e_vals = e_vals[~np.isnan(e_vals)]
+        hist_obj.RhoE, binedges1 = np.histogram(e_vals
+        , bins=bins1, normed=hist_obj.normed_flag)
+        bincenters = 0.5 * (binedges1[1:] + binedges1[:-1])  # Bincenters
+        hist_obj.E = bincenters
+        return hist_obj
+
 
     # * Calculate histogtram from the RASPA generated grid file, Ben Bucior's version
     def raspa2histo(grid_filename, hist_obj):
@@ -97,7 +129,8 @@ class histo:
 
         grid                                                          = pd.read_csv(grid_filename, header=None, delim_whitespace=True)  # Read the energy data
         e_vals                                                        = pd.to_numeric(grid[3][grid[3].as_matrix() != '?'])
-        bins1                                                         = np.linspace(min(e_vals)-0.5, hist_obj.E_max, hist_obj.nbins+1)
+        e_vals = e_vals/grid_obj.Temperature  # Reduced units for energy
+        bins1                                                         = np.linspace(min(e_vals)-0.5, hist_obj.E_max/grid_obj.Temperature , hist_obj.nbins+1)
         hist_obj.RhoE, binedges1 = np.histogram(e_vals, bins=bins1, normed=hist_obj.normed_flag)
         bincenters                                                    = 0.5 * (binedges1[1:] + binedges1[:-1])  # Bincenters
         hist_obj.E                                                    = bincenters
@@ -111,7 +144,7 @@ class histo:
         Read the histogram in from a file with no header and two columns 
 
         :type histo_filename: str   
-        :param histo_filename: path to the histogram text file with two columns
+        :param histo_filename: path to the histogram text file with two columns, keep the energy dimensionless to avoid confusion.
     
         :type hist_obj: instance of the histo class
         :param hist_obj: contains all the info regarding the energy histogram of sites for a given material  
@@ -158,7 +191,8 @@ class histo:
 
         data, atoms = read_cube_data(cube_filename)
         e_vals = np.reshape(data, (data.size, 1), order='C')
-        bins1 = np.linspace(min(e_vals)-0.5, hist_obj.E_max, hist_obj.nbins+1)
+        e_vals = e_vals/grid_obj.Temperature  # Reduced units for energy
+        bins1 = np.linspace(min(e_vals)-0.5, hist_obj.E_max/grid_obj.Temperature , hist_obj.nbins+1)
         hist_obj.RhoE, binedges1 = np.histogram(e_vals, bins=bins1, normed=hist_obj.normed_flag)
         bincenters = 0.5 * (binedges1[1:] + binedges1[:-1])  # Bincenters
         hist_obj.E = bincenters

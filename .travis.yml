@@ -41,11 +41,11 @@ install:
 
     # Build and install package
   - conda build --python=$PYTHON_VER devtools/conda-recipe
-  - conda install --use-local pyIsoP_1.0
+  - conda install --use-local pyIsoP
 
 
 script:
-  - pytest -v --cov=pyIsoP_1.0 pyIsoP_1.0/tests/
+  - pytest -v --cov=pyIsoP pyIsoP/tests/
 
 notifications:
     email: false

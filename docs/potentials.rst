@@ -1,3 +1,5 @@
+.. _potentials:
+
 potentials module
 =================
 

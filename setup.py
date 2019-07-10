@@ -9,7 +9,7 @@ DOCLINES = __doc__.split("\n")
 
 setup(
     # Self-descriptive entries which should always be present
-    name='pyIsoP_1.0',
+    name='pyIsoP',
     author='Arun Gopalan',
     description=DOCLINES[0],
     long_description="\n".join(DOCLINES[2:]),
@@ -18,12 +18,12 @@ setup(
     license='BSD-3-Clause',
 
     # Which Python importable modules should be included when your package is installed
-    packages=['pyIsoP_1.0', "pyIsoP_1.0.tests"],
+    packages=['pyIsoP', "pyIsoP.tests"],
 
     # Optional include package data to ship with your package
     # Comment out this line to prevent the files from being packaged with your software
     # Extend/modify the list to include/exclude other items as need be
-    package_data={'pyIsoP_1.0': ["data/*.dat"]
+    # package_data={'pyIsoP': ["data/*.dat"]
                   },
 
     # Additional entries you may want simply uncomment the lines you want and fill in the data
@@ -38,5 +38,5 @@ setup(
 
     # Manual control if final package is compressible or not, set False to prevent the .egg from being made
     # zip_safe=False,
-
+    
 )
