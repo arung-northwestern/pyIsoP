@@ -39,6 +39,7 @@ Pore Structure Visualization
 The binary vtk file can be used to visualize and elucidate complex pore structures. 
 There are many softwares which can create volume and isosurface rendering from a vtk file. The image below is generated using Visit_ visualizer.
 We illustrated the complex pores of ZIF-4 using two isosurfaces at 20000 K (silver) and 0 K (brown).
+
 .. figure:: ./images/zif-4.png
    :align: center
    :height: 600
