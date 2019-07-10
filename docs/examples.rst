@@ -42,8 +42,8 @@ We illustrated the complex pores of ZIF-4 using two isosurfaces at 20000 K (silv
 
 .. figure:: ./images/zif-4.png
    :align: center
-   :height: 600
-   :width: 600
+   :height: 400
+   :width: 400
 
    
 
