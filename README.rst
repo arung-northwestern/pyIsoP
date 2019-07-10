@@ -27,7 +27,7 @@ Although PyIsoP offers many functionalities, the overall approach can be summari
 Coming Soon !
 =====================
  We are currently working on adding an automated, energy-based, molecular siting module and
-extending the isotherm prediction approach to ethane and higher alkanes.
+ extending the isotherm prediction approach to ethane and higher alkanes.
 
 
 
