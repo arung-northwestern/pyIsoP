@@ -2,7 +2,7 @@
 
 predictor module
 ================
-.. automodule:: predictor
+.. automodule:: pyIsoP.predictor
     :members:
     :undoc-members:
     :show-inheritance:

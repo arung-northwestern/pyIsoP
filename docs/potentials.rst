@@ -3,7 +3,7 @@
 potentials module
 =================
 
-.. automodule:: potentials
+.. automodule:: pyIsoP.potentials
     :members:
     :undoc-members:
     :show-inheritance:

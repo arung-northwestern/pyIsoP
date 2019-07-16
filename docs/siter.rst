@@ -1,7 +1,7 @@
 siter module
 ============
 
-.. automodule:: siter
+.. automodule:: pyIsoP.siter
     :members:
     :undoc-members:
     :show-inheritance:

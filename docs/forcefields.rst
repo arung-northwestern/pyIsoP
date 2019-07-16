@@ -3,7 +3,7 @@
 forcefields module
 ==================
 
-.. automodule:: forcefields
+.. automodule:: pyIsoP.forcefields
     :members:
     :undoc-members:
     :show-inheritance:

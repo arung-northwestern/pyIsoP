@@ -1,7 +1,7 @@
 machlearn module
 ================
 
-.. automodule:: machlearn
+.. automodule:: pyIsoP.machlearn
     :members:
     :undoc-members:
     :show-inheritance:

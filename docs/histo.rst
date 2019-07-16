@@ -1,7 +1,7 @@
 histo module
 ============
 
-.. automodule:: histo
+.. automodule:: pyIsoP.histo
     :members:
     :undoc-members:
     :show-inheritance:

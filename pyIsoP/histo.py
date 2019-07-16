@@ -34,6 +34,7 @@ class histo:
         :raises:
     
         :rtype: Instance of the histogram class
+        
         """
 
         self.nbins                                                    = nbins

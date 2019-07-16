@@ -37,6 +37,7 @@ class grid3D(object):
         :raises: ValueError
     
         :rtype: Returns an instance of the class grid3D
+        
         """
         import numpy as np
         # from pymatgen.io.cif import CifParser
