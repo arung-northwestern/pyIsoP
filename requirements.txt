@@ -1,0 +1,8 @@
+numpy>=1.13.3
+ase>=3.16
+tqdm>=4.15
+pyevtk>=1.0.1
+pandas>=0.20.3
+numba>=0.35
+scikit-learn>=0.19.1
+scipy>=1.1.0

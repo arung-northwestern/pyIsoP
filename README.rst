@@ -16,6 +16,9 @@ the energy landscape of a material is usually independent of temperature [#f1]_,
 swing into our calculations is also quick and easy. The energy can also be used to visualize the
 isoenergy contours (pore surfaces) in a material. Please refer to our documentation page on ReadTheDocs_ for theory, examples and the API reference.
 
+.. image:: https://readthedocs.org/projects/pip/badge/?version=stable
+:target: http://pip.pypa.io/en/stable/?badge=stable
+:alt: Documentation Status
 
 How does it work...?
 ==========================

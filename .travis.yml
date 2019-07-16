@@ -50,6 +50,7 @@ install:
 
     # Install pip only modules
   # - pip install pyIsoP
+  - pip install -r requirements.txt
   - python setup.py develop
   - pip install codecov
 
