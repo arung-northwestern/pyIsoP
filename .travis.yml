@@ -6,16 +6,16 @@ dist: trusty
 matrix:
   include:
     # Extra includes for OSX since python language is not available by default on OSX
-    - os: linux
-      python: 3.5
-      env: PYTHON_VER=3.5
+    # - os: linux
+    #   python: 3.5
+    #   env: PYTHON_VER=3.5
     - os: linux
       python: 3.6
       env: PYTHON_VER=3.6
 
-    - os: osx
-      language: generic
-      env: PYTHON_VER=3.5
+    # - os: osx
+    #   language: generic
+    #   env: PYTHON_VER=3.5
     - os: osx
       language: generic
       env: PYTHON_VER=3.6
@@ -42,7 +42,7 @@ install:
   - conda info -a
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy scipy pandas
   - conda update -q --all
-  - conda activate test-environment
+  - source activate test-environment
 
     # Create test environment for package
   # - conda create -n test python=$PYTHON_VER pip pytest pytest-cov
