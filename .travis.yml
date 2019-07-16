@@ -1,7 +1,7 @@
 language: python
 
 # Run jobs on container-based infrastructure, can be overridden per job
-dist: trusty
+#dist: trusty
 
 matrix:
   include:
@@ -10,21 +10,21 @@ matrix:
     #   python: 3.5
     #   env: PYTHON_VER=3.5
     - os: linux
-      python: 3.6
-      env: PYTHON_VER=3.6
+  #    python: 3.6
+  #    env: PYTHON_VER=3.6
 
     # - os: osx
     #   language: generic
     #   env: PYTHON_VER=3.5
     - os: osx
-      language: generic
-      env: PYTHON_VER=3.6
+    #  language: python
+ #     env: PYTHON_VER=3.6
 
-before_install:
-    # Additional info about the build
-  - uname -a
-  - df -h
-  - ulimit -a
+# before_install:
+#     # Additional info about the build
+#   - uname -a
+#   - df -h
+#   - ulimit -a
 
     # Install the Python environment
   #- source devtools/travis-ci/before_install.sh
