@@ -57,7 +57,7 @@ def test_write_grid(compute_grid):
 
         print("Testing the grid writer")
         path_to_out_vtk = os.path.dirname(pyIsoP.__file__)+'/data/zif-4_grid'
-        path_to_out_pdb = os.path.dirname(pyIsoP.__file__)+'/data/zif-4_repolicated.pdb'
+        path_to_out_pdb = os.path.dirname(pyIsoP.__file__)+'/data/zif-4_replicated.pdb'
         print("Writing .vts and .pdb tests into the data folder")
         writer.writer.write_vts(compute_grid,path_to_out_vtk)
         writer.writer.write_frame(compute_grid,path_to_out_pdb)
@@ -96,7 +96,7 @@ def test_machlearn2():
         import joblib
         import pyIsoP
         import os
-        path_to_joblib_dump=os.path.dirname(pyIsoP.__file__)+'/data/gprmodel.joblib'
+        path_to_joblib_dump=os.path.dirname(pyIsoP.__file__)+'/data/gprmodel_pyIsoP.joblib'
         gpr = joblib.load(path_to_joblib_dump)
 #        print(str(gpr.predict([[6,0.5,10,5]])))
         assert np.abs(gpr.predict([[6,0.5,10,5]])-3) <=1, "Coordination number predicted doesn't agree with reference!"  # See if the predicted n1 is within a certain expected range
