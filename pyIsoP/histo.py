@@ -66,7 +66,7 @@ class histo:
         e_vals                                                        = np.reshape(grid_obj.pot_repeat, (grid_obj.N_grid_total, 1), order='C')
         e_vals  = e_vals/grid_obj.Temperature # Reduced units for energy
         bins1                                                         = np.linspace(min(e_vals)-0.5, hist_obj.E_max/grid_obj.Temperature , hist_obj.nbins+1)
-        bins1 = np.reshape(bins1, (1,hist_obj.nbins+1))
+        # bins1 = np.reshape(bins1, (1,hist_obj.nbins+1))
         hist_obj.RhoE, binedges1                                               = np.histogram(e_vals, bins=bins1, normed=hist_obj.normed_flag)
         bincenters                                                    = 0.5 * (binedges1[1:] + binedges1[:-1])  # Bincenters
         hist_obj.E                                                    = bincenters
@@ -95,7 +95,7 @@ class histo:
         e_vals = np.reshape(grid_obj.pot_total, (grid_obj.N_grid_total, 1), order='C')
         e_vals = e_vals/grid_obj.Temperature  # Reduced units for energy
         bins1 = np.linspace(min(e_vals)-0.5, hist_obj.E_max/grid_obj.Temperature , hist_obj.nbins+1)
-        bins1 = np.reshape(bins1, (1,hist_obj.nbins+1))
+        # bins1 = np.reshape(bins1, (1,hist_obj.nbins+1))
         e_vals = e_vals[~np.isnan(e_vals)]
         hist_obj.RhoE, binedges1 = np.histogram(e_vals
         , bins=bins1, normed=hist_obj.normed_flag)
