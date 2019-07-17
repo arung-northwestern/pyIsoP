@@ -73,8 +73,9 @@ Source Code Reference
 
 .. [#f1] Feynman-Hibbs correction induces a temperature dependency on the energy grid, however this maybe assumed to be weak. For polyatomic probes, the existence of different orientations at any given site also imparts a temperature dependence on the energy grid.
 
-### Copyright
-    Copyright (c) 2019, Arun Gopalan
-
-#### Acknowledgements
+** Acknowledgements: 
+    Andrew Rosen, Snurr Research Group, Northwestern Univerisity.
     Project based on the [Computational Molecular Science Python Cookiecutter](https://github.com/molssi/cookiecutter-cms) version 1.0.
+
+Created by: Arun Gopalan
+
