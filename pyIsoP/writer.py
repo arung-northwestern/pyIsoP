@@ -142,7 +142,7 @@ class writer:
         """
 
         import numpy as np
-        from evtk.hl import gridToVTK
+        from pytestevtk.hl import gridToVTK
 
         # For we need the grid x, y, z, E style
         # Define the crazy unstructured grid
@@ -189,7 +189,7 @@ class writer:
         import numpy as np
         import os
         import pandas as pd
-        from evtk.hl import pointstoVTK
+        from pyevtk.hl import pointstoVTK
 
         data                                                         = pd.read_csv(input_file, delim_whitespace=True, header=None,names=['x', 'y', 'z', 'E', 'dEx', 'dEy', 'dEz'])
         
