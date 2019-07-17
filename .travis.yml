@@ -19,9 +19,7 @@ script:
   - conda info --envs
   - conda list --name test-environment
   - pytest -v pyIsoP/tests/
-  - python -V
-  - conda list --info envs
-  
+
 
 
 # language: python
