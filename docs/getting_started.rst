@@ -29,7 +29,8 @@ or clone from github_
 
 Dependencies
 ------------------
-To use all the functionality of PyIsoP the following python packages are required, which are installed automatically via inclusion in the setup.py.
+To use all the functionality of PyIsoP the following python packages are required, which if not present are also installed 
+automatically using pip_.
 
 * Python_ 3.6 or newer 
 * Numpy_ 1.13.3 or newer

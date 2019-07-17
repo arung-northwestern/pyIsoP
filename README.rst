@@ -35,7 +35,7 @@ How does it work...?
 ==========================
 Although PyIsoP offers many functionalities, the overall approach can be summarized as shown
 
-.. image:: ./docs/images/pyisop_doc.png
+.. figure:: ./docs/images/pyisop_doc.png
     :width: 600
     
     
