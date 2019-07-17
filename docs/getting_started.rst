@@ -29,24 +29,27 @@ or clone from github_
 
 Dependencies
 ------------------
-To use all the functionality of PyIsoP the following python packages are required, which as installed automatically via inclusion in the setup.py.
+To use all the functionality of PyIsoP the following python packages are required, which are installed automatically via inclusion in the setup.py.
 
 * Python_ 3.6 or newer 
 * Numpy_ 1.13.3 or newer
 * Scipy_ 1.1.0 or newer
 * Sklearn_ 0.19.1 or newer
 * ASE_ 3.16.0 or newer
-* VTK_ 1.0.1 or newer
+* PYEVTK_ 1.1.1 or newer
 * Pandas_ 0.20.3 or newer
 * Numba_ 0.35 or newer
+* PyTest_ 5.0.1 or newer
 * Tqdm_ 
+
 
 .. _Python: https://www.python.org/
 .. _Numpy: http://www.numpy.org/
 .. _Scipy : https://www.scipy.org/
 .. _Sklearn: https://scikit-learn.org/
 .. _ASE: https://wiki.fysik.dtu.dk/ase/
-.. _EVTK: https://bitbucket.org/pauloh/pyevtk
+.. _PYEVTK: https://bitbucket.org/pauloh/pyevtk
 .. _Pandas: https://pandas.pydata.org/
 .. _Numba: http://numba.pydata.org/
 .. _tqdm: https://github.com/tqdm/tqdm
+.. _PyTest: https://docs.pytest.org/en/latest/

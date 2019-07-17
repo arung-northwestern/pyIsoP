@@ -11,7 +11,7 @@ find more about the modules and functions and the possible options.
 .. _grid:
 
 Energy Grid Calculation
-===================================
+===========================================
 PyIsoP uses a vectorized_ grid calculator in the :ref:`grid3D`, in conjunction with interatomic potentials in
 :ref:`potentials` and parameters listed in RASPA_ format and read by the :ref:`forcefields` module. Some of the common force fields are included in the PyIsoP
 distribution in the forcefield directory.  
@@ -36,7 +36,7 @@ distribution in the forcefield directory.
 .. _pores:
 
 Pore Structure Visualization
-===================================
+===========================================
 
 The binary vtk file can be used to visualize and elucidate complex pore structures. 
 There are many softwares which can create volume and isosurface rendering from a vtk file. The image below is generated using Visit_ visualizer.
@@ -52,7 +52,7 @@ We illustrate the complex pores of ZIF-4 using two isosurfaces at 20000 K (silve
 .. _histogram:
 
 Energy Histogram
-===================================
+===========================================
 
 PyIsoP contains the :ref:`histogram` module which offers 3 ways for the user to obtain the energy histogram.  The number of bins and :math:`E_{max}` can be set while initializing the histogram.
 All the energies should be in the units of [K] to ensure consistency with the RASPA_ grid output.
@@ -86,7 +86,7 @@ All the energies should be in the units of [K] to ensure consistency with the RA
 .. _machlearn:
 
 Coordination Number from Machine Learning
-===================================
+===========================================
 
 In order to predict the guest-guest energy of hydrogen, we use a machine learning model (GPR) trained on the first-shell coordination number.
 Please refer to :ref:`theory` section or our recent work by Gopalan *et al.*, :cite:`gopalan2019fast`  for more details. PyIsoP provides 
@@ -117,7 +117,7 @@ a pre-trained model at 77 K which can predict the hydrogen coordination numbers 
 .. _isotherm:
 
 Adsorption Isotherm
-===================================
+===========================================
 PyIsoP takes in the temperature, pressures, void fraction, the energy histogram object, coordination numbers vector, Lennard-Jones well depth in [K] (should be consistent with the one used in the grid calculation) and the molecular weight (:math:`M_A`)
 and predicts the adsorption isotherm in the units of grams per liter of the adsorbent. Combining all the examples from above, the isotherm can be calculated using the :ref:`predictor` as 
 
@@ -130,7 +130,7 @@ and predicts the adsorption isotherm in the units of grams per liter of the adso
 .. _screening:
 
 Example Application to High-throughput Screening 
-===================================
+===========================================
 CoRE-MOF 2019 All Solvent Removed (12,914 structures)
 -------------------------------------------------------------------
 
