@@ -16,10 +16,10 @@ PyIsoP uses a vectorized_ grid calculator in the :ref:`grid3D`, in conjunction w
 
 .. code-block:: python
        
-        from grid3D import grid3D
-        from potentials import potentials
-        from forcefields import forcefields
-        from writer import writer
+        import pyIsoP.grid3D as grid3D
+        import pyIsoP.potentials as potentials
+        import pyIsoP.forcefields as forcefields
+        import pyIsoP.writer as writer
 
         ####################################################################
         # Calculate the grid
@@ -59,7 +59,7 @@ All the energies should be in the units of [K] to ensure consistency with the RA
 
 .. code-block:: python
 
-        from histo import histo                 # import the histogram module
+        import pyIsoP.histo as histo               # import the histogram module as histo
         h = histo()                                     # initialize a histo object
         h = histo.grid2histo(t2, h)            # update (overwrite) the histo object with histogram calculated from the grid3D object t2  
 
@@ -67,7 +67,7 @@ All the energies should be in the units of [K] to ensure consistency with the RA
 
 .. code-block:: python
 
-        from histo import histo                 # import the histogram module
+        import pyIsoP.histo as histo             # import the histogram module
         h = histo()                                     # initialize a histo object
         h = histo.raspa2histo('raspa_grid_filename.grid' , ,h)            # update (overwrite) the histo object with histogram calculated from the RASPA grid file.
         h = histo.cube2histo('cube_filename.cube',h)            # update (overwrite) the histo object with histogram calculated from a .cube file
@@ -76,7 +76,7 @@ All the energies should be in the units of [K] to ensure consistency with the RA
 
 .. code-block:: python
 
-        from histo import histo                 # import the histogram module
+        import pyIsoP.histo                 # import the histogram module as histo
         h = histo()                                     # initialize a histo object
         h = histo..file2histo('text_filename.dat', h)            # update (overwrite) the histo object with histogram calculated from the RASPA_ grid file.
 
@@ -102,7 +102,7 @@ a pre-trained model at 77 K which can predict the hydrogen coordination numbers 
 
 .. code-block:: python
 
-        from machlearn import machlearn
+        import pyIsoP.machlearn as machlearn
 
         m1= machlearn(restarts=2)                          # Initialize object with  2 optimizer restarts
         m1 = machlearn.GPR4n1( m1, 'file_with_data.csv', 0.9)   # Train the model with 90 % training and 10 % Testing
@@ -121,7 +121,7 @@ and predicts the adsorption isotherm in the units of grams per liter of the adso
 
 .. code-block:: python
 
-        from predictor import predictors
+        import pyIsoP.predictors as predictors
         g_L_CH2=predictors.predict_isotherm(T,P,Vf,h,n1,epsilon=46,MA=14)
 
 
