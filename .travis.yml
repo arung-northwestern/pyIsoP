@@ -16,6 +16,8 @@ install:
   # - pip install -r requirements.txt
   - python setup.py develop
 script:
+  - conda info --envs
+  - conda list --name test-environment
   - pytest -v pyIsoP/tests/
 
 
