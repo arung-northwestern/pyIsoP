@@ -7,7 +7,7 @@ Submodules
 tests\.test\_pyisop module
 --------------------------
 
-.. automodule:: tests.test_pyisop
+.. automodule:: pyIsoP.tests.test_pyIsoP
     :members:
     :undoc-members:
     :show-inheritance:

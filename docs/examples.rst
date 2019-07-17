@@ -4,15 +4,17 @@
 Examples
 ===============================================================
 
-Here we provide a few simple examples on using the different functionalities offered by PyIsoP.
-Please refer to the corresponding API reference to find more about the modules and functions and the possible options.
+Here we provide a few simple examples on using the different functionalities offered by PyIsoP. There are more options
+available to the individual functions than the ones demonstrated here. Please refer to the corresponding API reference to 
+find more about the modules and functions and the possible options.
 
 .. _grid:
 
 Energy Grid Calculation
-=======================
+===================================
 PyIsoP uses a vectorized_ grid calculator in the :ref:`grid3D`, in conjunction with interatomic potentials in
-:ref:`potentials` and parameters in RASPA_ format in the forcefields_ module.  
+:ref:`potentials` and parameters listed in RASPA_ format and read by the :ref:`forcefields` module. Some of the common force fields are included in the PyIsoP
+distribution in the forcefield directory.  
 
 .. code-block:: python
        
@@ -24,8 +26,8 @@ PyIsoP uses a vectorized_ grid calculator in the :ref:`grid3D`, in conjunction w
         ####################################################################
         # Calculate the grid
         t1=grid3D('ZIF-4_mod.cif',spacing=0.5)          # Intialize grid3D object
-        f1=forcefields(t1,sigma=3.95, epsilon=46)      # LJ parameters for the single-site probe 
-        t2= grid3D.grid_calc(t1,"lj",f1)                          # Save to different object or overwrite the existing object
+        f1=forcefields(t1, force_field='C:/PyIsoP/forcefield/UFF', sigma=3.95, epsilon=46)      # Update the force field details to grid obj. t1
+        t2= grid3D.grid_calc(t1,"lj",f1)                          # Save to different object or overwrite the existing object with computed 3D grid.
 
         # Save coordinates for visualizing later
         writer.writer.write_vts(t2,'zif-4_grid')                   # Write a binary vtk file
@@ -34,7 +36,7 @@ PyIsoP uses a vectorized_ grid calculator in the :ref:`grid3D`, in conjunction w
 .. _pores:
 
 Pore Structure Visualization
-============================
+===================================
 
 The binary vtk file can be used to visualize and elucidate complex pore structures. 
 There are many softwares which can create volume and isosurface rendering from a vtk file. The image below is generated using Visit_ visualizer.
@@ -50,7 +52,7 @@ We illustrate the complex pores of ZIF-4 using two isosurfaces at 20000 K (silve
 .. _histogram:
 
 Energy Histogram
-=========================================
+===================================
 
 PyIsoP contains the :ref:`histogram` module which offers 3 ways for the user to obtain the energy histogram.  The number of bins and :math:`E_{max}` can be set while initializing the histogram.
 All the energies should be in the units of [K] to ensure consistency with the RASPA_ grid output.
@@ -59,7 +61,7 @@ All the energies should be in the units of [K] to ensure consistency with the RA
 
 .. code-block:: python
 
-        import pyIsoP.histo as histo               # import the histogram module as histo
+        import pyIsoP.histo as histo                 # import the histogram module
         h = histo()                                     # initialize a histo object
         h = histo.grid2histo(t2, h)            # update (overwrite) the histo object with histogram calculated from the grid3D object t2  
 
@@ -67,7 +69,7 @@ All the energies should be in the units of [K] to ensure consistency with the RA
 
 .. code-block:: python
 
-        import pyIsoP.histo as histo             # import the histogram module
+        import pyIsoP.histo as histo                 # import the histogram module
         h = histo()                                     # initialize a histo object
         h = histo.raspa2histo('raspa_grid_filename.grid' , ,h)            # update (overwrite) the histo object with histogram calculated from the RASPA grid file.
         h = histo.cube2histo('cube_filename.cube',h)            # update (overwrite) the histo object with histogram calculated from a .cube file
@@ -76,7 +78,7 @@ All the energies should be in the units of [K] to ensure consistency with the RA
 
 .. code-block:: python
 
-        import pyIsoP.histo                 # import the histogram module as histo
+        import pyIsoP.histo as histo                 # import the histogram module
         h = histo()                                     # initialize a histo object
         h = histo..file2histo('text_filename.dat', h)            # update (overwrite) the histo object with histogram calculated from the RASPA_ grid file.
 
@@ -84,7 +86,7 @@ All the energies should be in the units of [K] to ensure consistency with the RA
 .. _machlearn:
 
 Coordination Number from Machine Learning
-=========================================
+===================================
 
 In order to predict the guest-guest energy of hydrogen, we use a machine learning model (GPR) trained on the first-shell coordination number.
 Please refer to :ref:`theory` section or our recent work by Gopalan *et al.*, :cite:`gopalan2019fast`  for more details. PyIsoP provides 
@@ -110,12 +112,12 @@ a pre-trained model at 77 K which can predict the hydrogen coordination numbers 
 
 
 -   Preferred:  To use algorithms other than GPR, users are encouraged to train their own model and be ready to provide :math:`n_1` as a vector (array corresponding to different pressures) to be fed into
-    the isotherm_ calculation (example below) using the predictor_ module .
+    the isotherm_ calculation (example below) using the :ref:`predictor` module .
 
 .. _isotherm:
 
 Adsorption Isotherm
-==============================
+===================================
 PyIsoP takes in the temperature, pressures, void fraction, the energy histogram object, coordination numbers vector, Lennard-Jones well depth in [K] (should be consistent with the one used in the grid calculation) and the molecular weight (:math:`M_A`)
 and predicts the adsorption isotherm in the units of grams per liter of the adsorbent. Combining all the examples from above, the isotherm can be calculated using the :ref:`predictor` as 
 
@@ -127,8 +129,8 @@ and predicts the adsorption isotherm in the units of grams per liter of the adso
 
 .. _screening:
 
-High-throughput Screening 
-===================
+Example Application to High-throughput Screening 
+===================================
 CoRE-MOF 2019 All Solvent Removed (12,914 structures)
 -------------------------------------------------------------------
 

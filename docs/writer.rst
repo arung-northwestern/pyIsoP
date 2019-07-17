@@ -1,7 +1,7 @@
 writer module
 =============
 
-.. automodule:: writer
+.. automodule:: pyIsoP.writer
     :members:
     :undoc-members:
     :show-inheritance:

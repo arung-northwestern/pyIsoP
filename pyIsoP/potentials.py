@@ -1,6 +1,6 @@
 class potentials:
 
-    
+
         #*######
         #*#     #  ####  ##### ###### #    # ##### #   ##   #       ####
         #*#     # #    #   #   #      ##   #   #   #  #  #  #      #
@@ -68,7 +68,7 @@ class potentials:
 
             """
 
-  
+
             # * Let's convert everything into SI unites to evaluate the Feynman Hibbs constant clearly: hcut**2/[(r**2)(24*pi*m*k_B*T)]
             hcut = 1.0545718E-34  # * Planck's constant / 2*pi in Js or kg m2 s-1
             angs = 1E-10          # * angstrom in m
