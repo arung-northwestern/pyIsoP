@@ -26,7 +26,7 @@ isoenergy contours (pore surfaces) in a material. Please refer to our documentat
     :alt: Documentation Status
 
 .. image:: https://travis-ci.com/arung-northwestern/pyIsoP.svg?branch=master
-    :target: https://travis-ci.com/arung-northwestern/pyIsoP
+    :target: https://travis-ci.com/arung-northwestern/pyIsoP&style=for-the-badge
 
 
 
@@ -41,9 +41,9 @@ Although PyIsoP offers many functionalities, the overall approach can be summari
     
 Coming Soon !
 =====================
- We are currently working on adding an automated, energy-based, molecular siting module and
- extending the isotherm prediction approach to ethane and higher alkanes. Stay tuned for new features, tests, bug-fixes
- and examples.
+    We are currently working on adding an automated, energy-based, molecular siting module and
+    extending the isotherm prediction approach to ethane and higher alkanes. Stay tuned for new features, tests, bug-fixes
+    and examples.
 
 .. _ReadTheDocs: https://pyisop.readthedocs.io/en/latest/
 .. rubric::Footnotes
@@ -51,8 +51,8 @@ Coming Soon !
 .. [#f1] Feynman-Hibbs correction induces a temperature dependency on the energy grid, however this maybe assumed to be weak. For polyatomic probes, the existence of different orientations at any given site also imparts a temperature dependence on the energy grid.
 
 ### Copyright
-    Copyright (c) 2019, Arun Gopalan
+    Copyright (c) Arun Gopalan, 2019.
 
-#### Acknowledgements
+### Acknowledgements
     Project based on the [Computational Molecular Science Python Cookiecutter](https://github.com/molssi/cookiecutter-cms) version 1.0.
 

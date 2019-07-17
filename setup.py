@@ -2,7 +2,7 @@
 PyIsoP
 A fast and accurate semi-analytic method for predicting small molecule adsorption in nanoporous
 materials, ideal for high-throughput screening applications. Developed by Arun Gopalan at
-R.Q.Snurr Research Group, Northwestern University.
+R. Q. Snurr Research Group, Northwestern University.
 """
 from setuptools import setup
 import versioneer
