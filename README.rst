@@ -28,7 +28,8 @@ isoenergy contours (pore surfaces) in a material. Please refer to our documentat
 .. image:: https://travis-ci.com/arung-northwestern/pyIsoP.svg?branch=master
     :target: https://travis-ci.com/arung-northwestern/pyIsoP&style=for-the-badge
 
-
+.. image:: https://badge.fury.io/py/pyIsoP.svg
+    :target: https://badge.fury.io/py/pyIsoP
 
 
 How does it work...?
