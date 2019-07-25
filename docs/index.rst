@@ -75,7 +75,7 @@ Source Code Reference
 
 ** Acknowledgements: 
     Andrew Rosen, Snurr Research Group, Northwestern Univerisity.
-    Project based on the [Computational Molecular Science Python Cookiecutter_ version 1.0.
+    Project based on the Computational Molecular Science Python Cookiecutter_ version 1.0.
 
 .. _Cookiecutter: https://github.com/molssi/cookiecutter-cms
 
