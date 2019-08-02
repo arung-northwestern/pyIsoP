@@ -12,7 +12,7 @@ class grid3D(object):
       ! Does not include the electrostatics
 
     """
-
+    from numba import vectorize
     # * Initialize the grid object
     def __init__(self, cif_file, spacing=1.0, cutoff=12.8, temperature=77.0, index=None):
         """ 
@@ -199,8 +199,7 @@ class grid3D(object):
 
           :rtype: Returns the 3D energy grid
           """
-
-       
+          
           import numpy as np
           import pyIsoP.potentials as potentials
           from tqdm import tqdm
@@ -314,3 +313,4 @@ class grid3D(object):
       #min_neg=out_coord[en<0]
 
       return np.array(out_coord), np.array(en)
+
