@@ -4,11 +4,28 @@ A fast and accurate semi-analytic method for predicting small molecule adsorptio
 materials, ideal for high-throughput screening applications. Developed by Arun Gopalan at
 R. Q. Snurr Research Group, Northwestern University.
 """
-from setuptools import setup
+from setuptools import setup, Command
 import versioneer
 
 DOCLINES = __doc__.split("\n")
 
+# class PyTest(Command):
+#     user_options = []
+#     def initialize_options(self):
+#         pass
+
+#     def finalize_options(self):
+#         pass
+
+#     def run(self):
+#         import subprocess
+#         import sys
+#         errno = subprocess.call([sys.executable, 'runtests.py'])
+#         raise SystemExit(errno)
+
+# This is to use pyTest for running tests in the future
+# cmd_dict = versioneer.get_cmdclass()
+# cmd_dict.update({'test': PyTest})
 setup(
     # Self-descriptive entries which should always be present
     name='pyIsoP',
@@ -21,11 +38,13 @@ setup(
 
     # Which Python importable modules should be included when your package is installe  d
     packages=['pyIsoP', "pyIsoP.tests"],
+    # test_suite="pyIsoP.tests",
+    # cmdclass={test:'PyTest'},
 
     # Optional include package data to ship with your package
     # Comment out this line to prevent the files from being packaged with your software
     # Extend/modify the list to include/exclude other items as need be
-    package_data={'pyIsoP': ["data/*.dat","data/*.joblib","data/*.cif","data/*.pdb","data/*.md"]},
+    package_data={'pyIsoP': ["data/*.dat","data/*.joblib","data/*.cif","data/*.pdb","data/*.md", "tests/*"]},
 
     # Additional entries you may want simply uncomment the lines you want and fill in the data
     author_email='arungopalan2020@u.northwestern.edu',      # Author email
@@ -39,3 +58,4 @@ setup(
     # zip_safe=False,
     
 )
+# print(versioneer.get_cmdclass())

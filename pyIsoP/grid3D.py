@@ -301,7 +301,7 @@ class grid3D(object):
       :rtype: coordinates of the minima (array of floats), energy of the minima (array of floats)
       """
       import numpy as np
-      import grid3D
+      import pyIsoPgrid3D as grid3D
 
       lm = grid3D.grid3D.detect_local_minima(grid_obj)
       out_coord = np.column_stack((grid_obj.x[lm], grid_obj.y[lm], grid_obj.z[lm]))
