@@ -56,6 +56,11 @@ Coming Soon !
     Andrew Rosen, Snurr Research Group, Northwestern Univerisity.
     Project based on the Computational Molecular Science Python Cookiecutter_ version 1.0.
 
+    This work is supported by the U.S. Department of Energy, Office of Basic 
+    Energy Sciences, Division of Chemical Sciences, Geosciences and 
+    Biosciences through the Nanoporous Materials Genome Center under award 
+    DE-FG02-17ER16362.
+
 .. _Cookiecutter: https://github.com/molssi/cookiecutter-cms
 
 Created by: Arun Gopalan
