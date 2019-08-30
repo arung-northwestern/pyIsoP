@@ -26,7 +26,7 @@ distribution in the forcefield directory.
         ####################################################################
         # Calculate the grid
         t1=grid3D.grid3D('ZIF-4_mod.cif',spacing=0.5)          # Intialize grid3D object
-        f1=forcefields.forcefields(t1, force_field='C:/PyIsoP/forcefield/UFF', sigma=3.95, epsilon=46)      # Update the force field details to grid obj. t1
+        f1=forcefields.forcefields(t1, forcefield='C:/PyIsoP/forcefield/UFF', sigma=3.95, epsilon=46)      # Update the force field details to grid obj. t1
         t2= grid3D.grid3D.grid_calc(t1,"lj",f1)                          # Save to different object or overwrite the existing object with computed 3D grid.
 
         # Save coordinates for visualizing later
