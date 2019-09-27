@@ -179,7 +179,34 @@ class grid3D(object):
         self.pot_sphere = []
         self.pot_total = []
         self.Temperature = temperature
+    # * Compute energy grid using Dask using the objects from PyIsoP
+    # * Currently implemented only for Lennard-Jones interactions
+    def grid_calc_dask(grid_obj, ff_obj):
 
+      # * Compute the energy at a grid point using Dask arrays inputs
+      # ! Not to be used outside of this routine
+      def grid_point_energy(g, frameda, Ada, sigda, epsda):
+            # Compute the energy at any grid point.
+            dr = g-frameda
+            dr = dr-np.round(dr)
+            dr = np.dot(Ada, dr.T).T
+            rsq = np.sum(dr**2, axis=1)
+            return np.sum((4*epsda) * ((sigda**12/(rsq)**6) - ((sigda)**6/(rsq)**3)))
+
+
+      # * Apply GPE over the length of the dask array
+      def apply_using_dask(t1,f1):
+          # Compute the grid for any configuration.
+          import numpy as np 
+          import dask.array as da
+          gps = da.stack(da.meshgrid(da.linspace(-0.5,0.5, t1.nx_total), da.linspace(-0.5,0.5, t1.ny_total),da.linspace(-0.5,0.5, t1.nz_total)), -1).reshape(-1, 3)
+          gps =gps.rechunk(10000,3)
+          grid = da.apply_along_axis(func1d=grid_point_energy, frameda=da.from_array(t1.coord), Ada=da.from_array(t1.A), sigda=da.from_array(f1.sigma_array), epsda=da.from_array(f1.epsilon_array), axis=1, arr=gps)
+          return grid
+
+      # * Actual one line code to compute grids from PyIsoP initialized grid, force field and potential
+      grid = apply_using_dask(grid_obj,ff_obj).reshape((grid_obj.nx_total,grid_obj.ny_total,grid_obj.nz_total)).rechunk(10,10,10) 
+      return grid
 
     # * Calculate the energy grid
     def grid_calc(grid_obj, potential_name, ff_obj, rmass=None, T=None):
