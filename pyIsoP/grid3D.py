@@ -161,24 +161,25 @@ class grid3D(object):
         self.X = np.linspace(0, 1, self.nx_total)
         self.Y = np.linspace(0, 1, self.ny_total)
         self.Z = np.linspace(0, 1, self.nz_total)
-        self.x = np.zeros((self.nx_total, self.ny_total, self.nz_total))
-        self.y = np.zeros((self.nx_total, self.ny_total, self.nz_total))
-        self.z = np.zeros((self.nx_total, self.ny_total, self.nz_total))
-        for k in range(self.nz_total):
-                for j in range(self.ny_total):
-                        for i in range(self.nx_total):
-                                self.x[i, j, k] = self.X[i]
-                                self.y[i, j, k] = self.Y[j]
-                                self.z[i, j, k] = self.Z[k]
-        for k in range(self.nz_total):
-                for j in range(self.ny_total):
-                        for i in range(self.nx_total):
-                                [self.x[i, j, k], self.y[i, j, k], self.z[i, j, k]] = np.dot(
-                                    self.A, [self.x[i, j, k], self.y[i, j, k], self.z[i, j, k]])
+        # self.x = np.zeros((self.nx_total, self.ny_total, self.nz_total))
+        # self.y = np.zeros((self.nx_total, self.ny_total, self.nz_total))
+        # self.z = np.zeros((self.nx_total, self.ny_total, self.nz_total))
+        # for k in range(self.nz_total):
+        #         for j in range(self.ny_total):
+        #                 for i in range(self.nx_total):
+        #                         self.x[i, j, k] = self.X[i]
+        #                         self.y[i, j, k] = self.Y[j]
+        #                         self.z[i, j, k] = self.Z[k]
+        # for k in range(self.nz_total):
+        #         for j in range(self.ny_total):
+        #                 for i in range(self.nx_total):
+        #                         [self.x[i, j, k], self.y[i, j, k], self.z[i, j, k]] = np.dot(
+        #                             self.A, [self.x[i, j, k], self.y[i, j, k], self.z[i, j, k]])
         self.ase = frame_repeat
         self.pot_sphere = []
         self.pot_total = []
         self.Temperature = temperature
+
 
     # * Calculate the energy grid
     def grid_calc(grid_obj, potential_name, ff_obj, rmass=None, T=None):
@@ -290,27 +291,27 @@ class grid3D(object):
           detected_minima = local_min - eroded_background
           return np.where(detected_minima)
 
-    def find_minima(grid_obj):
-      """ 
-      Finds the locations and energy of the local minima from a pretabulated energy grid object using the detect_local_minima function.
+    # def find_minima(grid_obj):
+    #   """ 
+    #   Finds the locations and energy of the local minima from a pretabulated energy grid object using the detect_local_minima function.
       
-      :type grid_obj: instance of the grid3D class
-      :param grid_obj: contains all the information regarding the energy grid 
+    #   :type grid_obj: instance of the grid3D class
+    #   :param grid_obj: contains all the information regarding the energy grid 
 
-      :rtype: coordinates of the minima (array of floats), energy of the minima (array of floats)
-      """
-      import numpy as np
-      import pyIsoPgrid3D as grid3D
+    #   :rtype: coordinates of the minima (array of floats), energy of the minima (array of floats)
+    #   """
+    #   import numpy as np
+    #   import pyIsoPgrid3D as grid3D
 
-      lm = grid3D.grid3D.detect_local_minima(grid_obj)
-      out_coord = np.column_stack((grid_obj.x[lm], grid_obj.y[lm], grid_obj.z[lm]))
-      pot_interp = grid3D.grid3D.GridInterpolator(grid_obj)
-      en = []
-      for i in range(len(out_coord)):
-        point = np.dot(grid_obj.A_inv, out_coord[i])
-        en.append(pot_interp(np.around(point, decimals=3)))
-      #en_neg=en[en<0]
-      #min_neg=out_coord[en<0]
+    #   lm = grid3D.grid3D.detect_local_minima(grid_obj)
+    #   out_coord = np.column_stack((grid_obj.x[lm], grid_obj.y[lm], grid_obj.z[lm]))
+    #   pot_interp = grid3D.grid3D.GridInterpolator(grid_obj)
+    #   en = []
+    #   for i in range(len(out_coord)):
+    #     point = np.dot(grid_obj.A_inv, out_coord[i])
+    #     en.append(pot_interp(np.around(point, decimals=3)))
+    #   #en_neg=en[en<0]
+    #   #min_neg=out_coord[en<0]
 
-      return np.array(out_coord), np.array(en)
+    #   return np.array(out_coord), np.array(en)
 
