@@ -182,8 +182,19 @@ class grid3D(object):
     # * Compute energy grid using Dask using the objects from PyIsoP
     # * Currently implemented only for Lennard-Jones interactions
     def grid_calc_dask(grid_obj, ff_obj):
-
-      # * Compute the energy at a grid point using Dask arrays inputs
+    
+      """ Description
+      :type grid_obj: PyIsoP grid object
+      :param grid_obj: contains all the information about the grid initialized using PyIsoP
+    
+      :type ff_obj: PyIsoP force field  object
+      :param ff_obj: contains all the information about the force field parameters for energy grid calculation.
+    
+      :raises:
+    
+      :rtype: Lazy evaluated 3D energy grid as a dask array. Call compute on your client to obtain actual values.
+      """  
+      # * Compute the energy at a grid point using Dask arrays as inputs
       # ! Not to be used outside of this routine
       def grid_point_energy(g, frameda, Ada, sigda, epsda):
             # Compute the energy at any grid point.
