@@ -197,6 +197,7 @@ class grid3D(object):
       # * Compute the energy at a grid point using Dask arrays as inputs
       # ! Not to be used outside of this routine
       def grid_point_energy(g, frameda, Ada, sigda, epsda):
+            import numpy as np
             # Compute the energy at any grid point.
             dr = g-frameda
             dr = dr-np.round(dr)
@@ -210,13 +211,17 @@ class grid3D(object):
           # Compute the grid for any configuration.
           import numpy as np 
           import dask.array as da
-          gps = da.stack(da.meshgrid(da.linspace(-0.5,0.5, t1.nx_total), da.linspace(-0.5,0.5, t1.ny_total),da.linspace(-0.5,0.5, t1.nz_total)), -1).reshape(-1, 3)
+          # gps = da.stack(da.meshgrid(da.linspace(-0.5,0.5, t1.nx_total), da.linspace(-0.5,0.5, t1.ny_total),da.linspace(-0.5,0.5, t1.nz_total)), -1).reshape(-1, 3)
+          gps = da.stack(da.meshgrid(t1.x_grid, t1.y_grid,t1.z_grid), -1).reshape(-1, 3) # * Only the unit cell.
           gps =gps.rechunk(10000,3)
           grid = da.apply_along_axis(func1d=grid_point_energy, frameda=da.from_array(t1.coord), Ada=da.from_array(t1.A), sigda=da.from_array(f1.sigma_array), epsda=da.from_array(f1.epsilon_array), axis=1, arr=gps)
           return grid
-
+      import numpy as np
+      import dask.array as da
       # * Actual one line code to compute grids from PyIsoP initialized grid, force field and potential
-      grid = apply_using_dask(grid_obj,ff_obj).reshape((grid_obj.nx_total,grid_obj.ny_total,grid_obj.nz_total)).rechunk(10,10,10) 
+      grid = apply_using_dask(grid_obj,ff_obj).reshape((grid_obj.nx,grid_obj.ny,grid_obj.nz)).rechunk(10,10,10) 
+      # grid =da.tile(grid, (np.int(grid_obj.nx_cells),np.int(grid_obj.ny_cells),np.int(grid_obj.nz_cells))) # * Use the symmetry to compute grid faster.
+      # grid =da.tile(grid, (2,2,2) # * Use the symmetry to compute grid faster.
       return grid
 
     # * Calculate the energy grid
