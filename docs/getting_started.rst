@@ -41,6 +41,7 @@ automatically using pip_.
 * Pandas_ 0.20.3 or newer
 * Numba_ 0.35 or newer
 * PyTest_ 5.0.1 or newer
+* Dask_ 2.2.0 or newer
 * Tqdm_ 
 
 
@@ -54,3 +55,4 @@ automatically using pip_.
 .. _Numba: http://numba.pydata.org/
 .. _tqdm: https://github.com/tqdm/tqdm
 .. _PyTest: https://docs.pytest.org/en/latest/
+.. _Dask: https://dask.org/
