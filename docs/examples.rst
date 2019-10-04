@@ -53,11 +53,9 @@ and/or even high-throughput screening of materials in an interactive fashion, ju
 
 We have to initialize a client for Dask depending upon where you want to compute the grid. 
 
-        2.1 Working on your laptop (1 CPU)
-        No need to do anything, Dask will automatically recognize and use multi-threading. No overhead will occur from information transfer between nodes.
+        2.1 **Working on your laptop (1 CPU)**: No need to do anything, Dask will automatically recognize and use multi-threading. No overhead will occur from information transfer between nodes.
 
-        2.2 Working on an HPC (many, many CPUs)
-        You have to start a mini-cluster with your processor and memory requirements and set that as your client. Here's an example on an HPC that uses SLURM as the job-scheduler
+        2.2 **Working on an HPC (many, many CPUs)**: You have to start a mini-cluster with your processor and memory requirements and set that as your client. Here's an example on an HPC that uses SLURM as the job-scheduler
 
         .. code-block:: python
 
@@ -117,10 +115,8 @@ Since Dask is already scalable and interactive, PyIsoP can be readily extended t
 
         # This function computes and returns the energy grid as a Dask array
         def compute_grid_pyisop_dask(cif, spacing=0.5):
-        
                 from pyIsoP import grid3D, forcefields
                 import numpy as np
-
                 t1=grid3D.grid3D(cif)          # Intialize grid3D object
                 f1=forcefields.forcefields(t1, force_field='/home/agp971/pyIsoP/forcefield/UFF', sigma=3.95, epsilon=46)      # Update the force field details to grid obj. t1
                 grid_dask = grid3D.grid3D.grid_calc_dask(t1,f1)  # Computes the grid as a Dask array.
@@ -276,7 +272,7 @@ is depicted in the figures below. Having the entire isotherm enables us to answe
 important questions regarding maximization of gas uptake quickly and accurately, like determining
 the choice of the adsorption and desorption conditions for a material with given void fraction and
 LCD or against any other textural property. For example, consider two materials A (highlighted in
-blue in figures (e) and (f)) and B (highlighted in red in figures (e)
+yellow in figures (e) and (f)) and B (highlighted in red in figures (e)
 and (f)) with very similar void fractions, close to 0.85 but with different largest cavity
 diameters of 13.5 :math:`\mathring{A}`  and 34.9 :math:`\mathring{A}`,  respectively. If one were to use A for storing hydrogen at 77
 K, increasing the adsorption pressure from 42 bar \ref{fig:L5} to 100 bar \ref{fig:L6}) would give
