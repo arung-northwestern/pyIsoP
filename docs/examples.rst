@@ -6,15 +6,25 @@ Examples
 
 Here we provide a few simple examples on using the different functionalities offered by PyIsoP. There are more options
 available to the individual functions than the ones demonstrated here. Please refer to the corresponding API reference to 
-find more about the modules and functions and the possible options.
+find more about the modules and functions and the possible options.b
 
 .. _grid:
 
 Energy Grid Calculation
-===========================================
-PyIsoP uses a vectorized_ grid calculator in the :ref:`grid3D`, in conjunction with interatomic potentials in
-:ref:`potentials` and parameters listed in RASPA_ format and read by the :ref:`forcefields` module. Some of the common force fields are included in the PyIsoP
-distribution in the forcefield directory.  
+================================================
+
+PyIsoP can compute energy grids using the grid calc or the grid_calc_dask (recommended) functions from the :ref:`grid3D` module. The functional forms for the interatomic potentials (Eg. Lennard-Jones) are defined
+in the :ref:`potentials`  module and the force field parameters are read by the :ref:`forcefields` module into an instance. Please take a look at 'pyIsoP\\forcefield\\UFF\\force_field_mixing_rules.def' file
+on GitHub for a example on specifying LJ parameters for use with PyIsoP. You will see that the formatting is very similar to that of RASPA_ except for the '_' often used in atom typing.
+
+.. _ grid_calc:
+
+1. Calculation using Numba_ (serial)
+------------------------------------------
+This is an older implementation that  uses vectorized_ from Numba_ for computing energy grids quickly on a single CPU (multi-threading).
+Although orders of magnitude faster than 'for' loops, this implementation lacks in scalability and algorithmic efficiency. It is still quite useful
+if you do not want to install Dask or if you want the output grid directly as a Numpy array and not as a lazy-evaluated Dask array.
+However, if you are calculating a fine grid, the resultant array may not fit into your RAM. The Dask option is recommended for such out-of-memory calculations.
 
 .. code-block:: python
        
@@ -32,6 +42,130 @@ distribution in the forcefield directory.
         # Save coordinates for visualizing later
         writer.writer.write_vts(t2,'zif-4_grid')                   # Write a binary vtk file
         writer.writer.write_frame(t2,'zif-4_repeat.pdb')    # Save the corresponding replicated structure corresponding to a 12.8 A (default) cut-off.
+
+.. _grid_calc_dask:
+
+2. Energy Grid Calculation using Dask_ (serial or paralllel)
+------------------------------------------------------------
+PyIsoP uses Dask_ to compute energy grids in parallel (multi-threading or over many CPUs) such that it will work on your tiny laptop 
+or a High Performance Cluster (HPC) with no or little additional coding on your part. This facilitates super-fast calculation of fine grids
+and/or even high-throughput screening of materials in an interactive fashion, just as if you were working on your local machine. 
+
+We have to initialize a client for Dask depending upon where you want to compute the grid. 
+
+        2.1 Working on your laptop (1 CPU)
+        No need to do anything, Dask will automatically recognize and use multi-threading. No overhead will occur from information transfer between nodes.
+
+        2.2 Working on an HPC (many, many CPUs)
+        You have to start a mini-cluster with your processor and memory requirements and set that as your client. Here's an example on an HPC that uses SLURM as the job-scheduler
+
+        .. code-block:: python
+
+                from dask_jobqueue import SLURMCluster # My HPC uses SLRURM
+                from distributed import Client         # Client class
+                cluster=SLURMCluster(cores=4, interface='ib0', project='p#$###', queue='short', walltime='04:00:00', memory='100GB') # This is one 'job' or worker, it has 4 CPUs.
+                cluster.scale(25)  # We are starting 25 such workers, a total of 100 CPUs
+                client= Client(cluster) # Use the mini-cluster as the client for our calculations.
+
+For many other options on setting up Dask, including HPCs, please refer to the Dask setup_ documentation.
+
+.. _setup: https://docs.dask.org/en/latest/setup.html
+
+
+The rest of the code is very similar to that from before, except ...
+
+.. code-block:: python
+       
+        import pyIsoP.grid3D as grid3D
+        import pyIsoP.potentials as potentials
+        import pyIsoP.forcefields as forcefields
+        import pyIsoP.writer as writer
+
+        ####################################################################
+        # Calculate the grid
+        t1=grid3D.grid3D('ZIF-4_mod.cif',spacing=0.5)          # Intialize grid3D object
+        f1=forcefields.forcefields(t1, force_field='C:/PyIsoP/forcefield/UFF', sigma=3.95, epsilon=46)      # Update the force field details to grid obj. t1
+        grid_dask = grid3D.grid3D.grid_calc_dask(t1,f1)                          # Returns the grid as a Dask array.
+
+
+
+the energy grid (grid_dask in the example above) returned now is a lazy-evaluated Dask array, with all the rules and element formulae embedded within. To evaluate it use
+
+
+.. code-block:: python
+        
+        # To evaluate it then and there, we can't do anything else unless evaluation is complete.
+        grid_numpy = grid_dask.compute()
+
+        # To evaluate in the background. We can continue adding rules to the array while the array is being 'persisted'.
+        client.persist(grid) # Starts in the background on an HPC.
+        grid = grid + 1.2345678 # Continue doing things to the array, just a silly example.
+
+Please refer to Dask documentation for all the possibilities using Dask-clients_ and Dask-arrays_.
+
+.. _Dask-clients: http://distributed.dask.org/en/latest/client.html
+.. _Dask-arrays: https://docs.dask.org/en/latest/array.html
+
+
+Bonus Example: Interactive, Scalable and High-throughput 
+-----------------------------------------------------------
+
+Dask-bags_ are ideal for performing the same function on many items (files, folders etc) in parallel, as long as the order of the bagged items is unimportant.
+Since Dask is already scalable and interactive, PyIsoP can be readily extended to high-throughput calculation of energy grids (or isotherms) using Dask-bags.  
+
+.. code-block:: python
+
+        # This function computes and returns the energy grid as a Dask array
+        def compute_grid_pyisop_dask(cif, spacing=0.5):
+        
+                from pyIsoP import grid3D, forcefields
+                import numpy as np
+
+                t1=grid3D.grid3D(cif)          # Intialize grid3D object
+                f1=forcefields.forcefields(t1, force_field='/home/agp971/pyIsoP/forcefield/UFF', sigma=3.95, epsilon=46)      # Update the force field details to grid obj. t1
+                grid_dask = grid3D.grid3D.grid_calc_dask(t1,f1)  # Computes the grid as a Dask array.
+                return np.array(grid_dask)                # Return the grid as a Numpy array after evaluating the Dask array.
+
+        import dask.bag as db # Import the Dask-bags class
+        import glob   # To dig up a bunch of cif files
+
+        cif_list = glob.glob('**/*.cif', recursive=True)                              # Grab all the CIF files in the current folder
+        many_grids=db.from_sequence(np.array(cif_list)).map(compute_grid_pyisop_dask) # Apply the function to all the items
+        client.persist(many_grids)                                                    # Start computing the grids on your pre-defined client.
+        
+
+
+4. Benchmarking on Energy Grids
+--------------------------------------
+
+
+
+.. _Dask-bags: https://docs.dask.org/en/latest/bag.html
+
+.. _after_thoughts:
+
+Notes:
+--------
+
+        -- Newer versions PyIsoP do not return the x, y, z values as 3D grids, this is simply to save space. Although you can use Numpy's meshgrid_ function to generate these from a grid object 't1' with one line of code
+                
+        .. code-block:: python
+
+                import numpy as np
+                x3d, ,y3d ,z3d = np.meshgrid(t1.xgrid, t1.y_grid, t1.z_grid)
+
+        -- The grid is calculated over one unit cell. If you'd like to replicate it to say 2x2x3 please use the tile_ function from Numpy to repeat the grid in blocks.
+
+        .. code-block:: python
+
+                import numpy as np
+                repeat_grid = np.tile(t1.pot, (2,2,3)) # Let's say you need 2x2x3 for making into VTK.
+
+        -- There is this one popular_strategy_ of using Numba inside Dask to get a massive speed improvement for some algorithms. Unfortunately, the current algorithm requires an array shape change, which prohibits the use to Numba on top of parallel Dask algorithm. However, the current code is still quite fast. See the benchmarking graphs above.
+
+.. _popular_strategy: https://towardsdatascience.com/how-i-learned-to-love-parallelized-applies-with-python-pandas-dask-and-numba-f06b0b367138
+.. _meshgrid: https://docs.scipy.org/doc/numpy/reference/generated/numpy.meshgrid.htm
+.. _tile: https://docs.scipy.org/doc/numpy/reference/generated/numpy.tile.html
 
 .. _pores:
 
@@ -130,7 +264,7 @@ and predicts the adsorption isotherm in the units of grams per liter of the adso
 .. _screening:
 
 Example Application to High-throughput Screening 
-===========================================
+===================================================
 CoRE-MOF 2019 All Solvent Removed (12,914 structures)
 -------------------------------------------------------------------
 
@@ -149,7 +283,7 @@ K, increasing the adsorption pressure from 42 bar \ref{fig:L5} to 100 bar \ref{f
 an improvement of less than 1\% (56.939 g/L to 57.92 g/L) in gas uptake, hence is not worthwhile considering
 the increased costs and risks of storing at higher pressures. Instead, if one were using B, the
 same change in pressure will improve the the uptake by about 50\% (30.87 g/L to 44.065 g/L), which might be more
-economically feasible. Please refer to Gopalan *et al.* :ref:`gopalan2019fast` for more information.
+economically feasible. Please refer to Gopalan *et al.* :cite:`gopalan2019fast` for more information.
 
 
 
@@ -159,3 +293,7 @@ economically feasible. Please refer to Gopalan *et al.* :ref:`gopalan2019fast` f
 .. _vectorized: https://numba.pydata.org/numba-doc/dev/user/vectorize.html
 .. _VisIt: https://wci.llnl.gov/simulation/computer-codes/visit/
 .. _RASPA: https://github.com/numat/RASPA2
+.. _Numba: http://numba.pydata.org/
+.. _Dask: https://dask.org/
+------------------------
+.. bibliography:: mybibliography1.bib
