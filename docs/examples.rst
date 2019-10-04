@@ -61,6 +61,7 @@ We have to initialize a client for Dask depending upon where you want to compute
 
                 from dask_jobqueue import SLURMCluster # My HPC uses SLRURM
                 from distributed import Client         # Client class
+                
                 cluster=SLURMCluster(cores=4, interface='ib0', project='p#$###', queue='short', walltime='04:00:00', memory='100GB') # This is one 'job' or worker, it has 4 CPUs.
                 cluster.scale(25)  # We are starting 25 such workers, a total of 100 CPUs
                 client= Client(cluster) # Use the mini-cluster as the client for our calculations.
@@ -112,8 +113,10 @@ Dask-bags_ are ideal for performing the same function on many items (files, fold
 Since Dask is already scalable and interactive, PyIsoP can be readily extended to high-throughput calculation of energy grids (or isotherms) using Dask-bags.  
 
 .. code-block:: python
-
+        
+        ####################################################################
         # This function computes and returns the energy grid as a Dask array
+        ####################################################################
         def compute_grid_pyisop_dask(cif, spacing=0.5):
                 from pyIsoP import grid3D, forcefields
                 import numpy as np
@@ -122,6 +125,9 @@ Since Dask is already scalable and interactive, PyIsoP can be readily extended t
                 grid_dask = grid3D.grid3D.grid_calc_dask(t1,f1)  # Computes the grid as a Dask array.
                 return np.array(grid_dask)                # Return the grid as a Numpy array after evaluating the Dask array.
 
+        ##############
+        # Main code
+        ##############
         import dask.bag as db # Import the Dask-bags class
         import glob   # To dig up a bunch of cif files
 
