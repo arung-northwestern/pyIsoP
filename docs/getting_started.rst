@@ -42,6 +42,7 @@ automatically using pip_.
 * Numba_ 0.35 or newer
 * PyTest_ 5.0.1 or newer
 * Dask_ 2.2.0 or newer
+* Dask_jobqueue_ 0.6.2 or newer
 * Tqdm_ 
 
 
@@ -56,3 +57,4 @@ automatically using pip_.
 .. _tqdm: https://github.com/tqdm/tqdm
 .. _PyTest: https://docs.pytest.org/en/latest/
 .. _Dask: https://dask.org/
+.. _Dask_jobqueue: https://jobqueue.dask.org/en/latest/
