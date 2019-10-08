@@ -25,6 +25,16 @@ def compute_grid():
         return t2
 #%%
 @pytest.fixture
+def compute_grid_dask():
+        import os
+        from pyIsoP import grid3D, forcefields, writer
+        path_to_file = os.path.dirname(pyIsoP.__file__)+'/data/ZIF-4_mod.cif'
+        t1=grid3D.grid3D(path_to_file,spacing=0.5 )
+        f1=forcefields.forcefields(t1,sigma=3.95, epsilon=46,forcefield=os.path.dirname(pyIsoP.__file__)+'/../forcefield/UFF')
+        t2= grid3D.grid3D.grid_calc_dask(t1,f1)
+        return t2.compute()        
+#%%
+@pytest.fixture
 def compute_ml():
         import os
         import pyIsoP   
@@ -49,6 +59,11 @@ def test_grid_values(compute_grid):
         assert np.abs(np.min(np.round(compute_grid.pot_repeat, decimals=2)+1819.74)<=1E-4), "Grid minimum does not match reference"
 #     assert(np.max(compute_grid.pot_repeat)==)
 #%%
+
+def test_grid_values_dask(compute_grid_dask):
+        test_grid_values(compute_grid_dask)
+
+#%%
 def test_write_grid(compute_grid):
         import pyIsoP
         import os
@@ -62,6 +77,10 @@ def test_write_grid(compute_grid):
         writer.writer.write_vts(compute_grid,path_to_out_vtk)
         writer.writer.write_frame(compute_grid,path_to_out_pdb)
         #should we assert something..?
+#%%
+def test_write_grid_dask(compute_grid_dask):
+        test_write_grid(compute_grid_dask)
+
 #%%
 def test_histo_vals(compute_histo):
         import numpy as np
