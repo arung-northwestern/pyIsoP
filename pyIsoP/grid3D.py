@@ -250,7 +250,7 @@ class grid3D(object):
             dr = np.dot(Ada, dr.T).T
             rsq = np.sum(dr**2, axis=1) # * Actual center to center distance squared.
             rsqrt = np.sqrt(rsq) # * The center to center distance
-            return np.min((rsqrt-sigda*2+sig)) #* Subtract the diameter of the framework atom.
+            return np.min((rsqrt-(sigda*2-sig)*0.5)) #* Subtract the diameter of the framework atom.
 
 
       # * Apply GPE over the length of the dask array

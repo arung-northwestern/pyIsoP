@@ -123,7 +123,6 @@ Since Dask is already scalable and interactive, PyIsoP can be readily extended t
                 t1=grid3D.grid3D(cif)          # Intialize grid3D object
                 f1=forcefields.forcefields(t1, force_field='/home/agp971/pyIsoP/forcefield/UFF', sigma=3.95, epsilon=46)      # Update the force field details to grid obj. t1
                 grid_dask = grid3D.grid3D.grid_calc_dask(t1,f1)  # Computes the grid as a Dask array.
-
                 return grid_dask.compute()               # Returns the grid as a Numpy array here itself, only because we are saving space by wrapping things in dask bags later anyway.
 
         ##############
@@ -145,30 +144,33 @@ Since Dask is already scalable and interactive, PyIsoP can be readily extended t
         
         
 
-        # Or create a new grid3D object for the first CIF and save it there
+        # Or create a new grid3D object for any of the CIFs (first entry chosen below) and save the energy grid there there
         t1=grid3D.grid3D(cif_list[0])          # Intialize grid3D object
-        t1.pot = many_grids.compute()[0]       # Stored the desired grid into the grid3D object
+        t1.pot_repeat = many_grids.compute()[0]       # Stored the desired grid into the grid3D object
+
+        # Like before, you can also write this into a binary VTK (.vts) file for visualization
+        from pyIsoP import writer
+        writer.writer.write_vts(grid_obj=t1, 'some_filename')
 
 
-4. Benchmarking on Energy Grids
+4. Benchmarking on a Fine Energy Grids
 --------------------------------------
 
-Let's try computing the energy grid for Cu-BTC which has a unit cell is a simple cube with a length of 26.343 $\AA$ for
-each edge. Our mini-cluster consists of one or more workers, where each worker (or job) consists of 4 CPUs and a memory
+Let's try computing the energy grid for Cu-BTC which has a simple-cubic unit cell and an edge length of 26.343 angstroms. Our mini-cluster consists of one or more workers, where each worker (or job) consists of 4 CPUs and a memory
 of 100 GB (only a small fraction of which will be used here). Since parallel computing involves many stages of information reading, writing and transfer added atop the actual computing time,
-only the total time is plotted here. We choose a rather fine grid of 0.1 $\AA$ spacing (**263x263x263=18,191,447 grid points**) and compute it 
+only the total time is plotted here. We choose a rather fine grid of 0.1 angstrom spacing (**263x263x263=18,191,447 grid points**) and compute it 
 by employing 10 (40 CPUs), 20 (80 CPUs), 25(100 CPUs) and 30 (120 CPUs) workers respectively with each worker having a maximum memory of 100 GB. We see that even at 120 CPUs, the total 
-computation time continues to drop linearly, which indicates that we haven't hit the point of diminishing returns yet, at least for this fine of a grid for this material. 
+computation time continues to drop linearly, which indicates that we haven't hit the point of diminishing returns yet, at least for this fine of a grid on this material. 
 
+.. figure:: ./images/bench_pyisop.jpg
+   :align: center
+..    :height: 300
+..    :width: 400
 
-
-We can mimic high-throughput screening by computing the same grid multiple times. It took
-** min s ** to compute 0.5 $\AA$ grid (which is sufficient for predicting isotherms accurately using PyIsoP) for Cu-BTC 30 times in parallel using a mini-cluster of 25 workers (100 CPUs).
-The performance may vary depending upon your read/write speeds on your hardware, the number of CPUs per node, the memory available per CPU and the speed of information transfer between workers. We
-encourage users of PyIsoP to benchmark their test calculations on their own machines before performing full-fledged high-throughput screening.
-
-
-- 
+.. We can mimic high-throughput screening by computing the same grid multiple times. It took
+.. ** min s ** to compute 0.5 angstrom grid (which is sufficient for predicting isotherms accurately using PyIsoP) for Cu-BTC 30 times in parallel using a mini-cluster of 25 workers (100 CPUs).
+.. The performance may vary depending upon your read/write speeds on your hardware, the number of CPUs per node, the memory available per CPU and the speed of information transfer between workers. We
+.. encourage users of PyIsoP to benchmark their test calculations on their own machines before performing full-fledged high-throughput screening.
 
 .. _Dask-bags: https://docs.dask.org/en/latest/bag.html
 
@@ -191,7 +193,7 @@ Notes:
                 import numpy as np
                 repeat_grid = np.tile(t1.pot, (2,2,3)) # Let's say you need 2x2x3 for making into VTK.
 
-        -- There is this one popular_strategy_ of using Numba inside Dask to get a massive speed improvement for some algorithms. Unfortunately, the current algorithm requires an array shape change, which prohibits the use to Numba on top of parallel Dask algorithm. However, the current code is still quite fast. See the benchmarking graphs above.
+        -- There is this one popular_strategy_ of using Numba inside Dask to get a massive speed improvement for some algorithms. Unfortunately, the current algorithm requires an array shape change, which prohibits the use to Numba on top of the parallel Dask algorithm. However, the current code is still quite fast. See the benchmarking graphs above.
 
 .. _popular_strategy: https://towardsdatascience.com/how-i-learned-to-love-parallelized-applies-with-python-pandas-dask-and-numba-f06b0b367138
 .. _meshgrid: https://docs.scipy.org/doc/numpy/reference/generated/numpy.meshgrid.htm
@@ -325,5 +327,7 @@ economically feasible. Please refer to Gopalan *et al.* :cite:`gopalan2019fast` 
 .. _RASPA: https://github.com/numat/RASPA2
 .. _Numba: http://numba.pydata.org/
 .. _Dask: https://dask.org/
+
 ------------------------
+
 .. bibliography:: mybibliography1.bib
