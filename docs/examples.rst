@@ -123,7 +123,8 @@ Since Dask is already scalable and interactive, PyIsoP can be readily extended t
                 t1=grid3D.grid3D(cif)          # Intialize grid3D object
                 f1=forcefields.forcefields(t1, force_field='/home/agp971/pyIsoP/forcefield/UFF', sigma=3.95, epsilon=46)      # Update the force field details to grid obj. t1
                 grid_dask = grid3D.grid3D.grid_calc_dask(t1,f1)  # Computes the grid as a Dask array.
-                return np.array(grid_dask)                # Return the grid as a Numpy array after evaluating the Dask array.
+
+                return grid_dask.compute()               # Returns the grid as a Numpy array here itself, only because we are saving space by wrapping things in dask bags later anyway.
 
         ##############
         # Main code
@@ -133,14 +134,41 @@ Since Dask is already scalable and interactive, PyIsoP can be readily extended t
 
         cif_list = glob.glob('**/*.cif', recursive=True)                              # Grab all the CIF files in the current folder
         many_grids=db.from_sequence(np.array(cif_list)).map(compute_grid_pyisop_dask) # Apply the function to all the items
-        client.persist(many_grids)                                                    # Start computing the grids on your pre-defined client.
+        many_grids.persist() # start the calculations in the background, returns a future.
         
+        
+        # To print all the grids as numpy arrays use
+        many_grids.compute()
+
+        # To print any one (for example the first grid) use.
+        many_grids.compute()[0]
+        
+        
+
+        # Or create a new grid3D object for the first CIF and save it there
+        t1=grid3D.grid3D(cif_list[0])          # Intialize grid3D object
+        t1.pot = many_grids.compute()[0]       # Stored the desired grid into the grid3D object
 
 
 4. Benchmarking on Energy Grids
 --------------------------------------
 
+Let's try computing the energy grid for Cu-BTC which has a unit cell is a simple cube with a length of 26.343 $\AA$ for
+each edge. Our mini-cluster consists of one or more workers, where each worker (or job) consists of 4 CPUs and a memory
+of 100 GB (only a small fraction of which will be used here). Since parallel computing involves many stages of information reading, writing and transfer added atop the actual computing time,
+only the total time is plotted here. We choose a rather fine grid of 0.1 $\AA$ spacing (**263x263x263=18,191,447 grid points**) and compute it 
+by employing 10 (40 CPUs), 20 (80 CPUs), 25(100 CPUs) and 30 (120 CPUs) workers respectively with each worker having a maximum memory of 100 GB. We see that even at 120 CPUs, the total 
+computation time continues to drop linearly, which indicates that we haven't hit the point of diminishing returns yet, at least for this fine of a grid for this material. 
 
+
+
+We can mimic high-throughput screening by computing the same grid multiple times. It took
+** min s ** to compute 0.5 $\AA$ grid (which is sufficient for predicting isotherms accurately using PyIsoP) for Cu-BTC 30 times in parallel using a mini-cluster of 25 workers (100 CPUs).
+The performance may vary depending upon your read/write speeds on your hardware, the number of CPUs per node, the memory available per CPU and the speed of information transfer between workers. We
+encourage users of PyIsoP to benchmark their test calculations on their own machines before performing full-fledged high-throughput screening.
+
+
+- 
 
 .. _Dask-bags: https://docs.dask.org/en/latest/bag.html
 
