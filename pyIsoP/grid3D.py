@@ -224,6 +224,52 @@ class grid3D(object):
       # grid =da.tile(grid, (2,2,2) # * Use the symmetry to compute grid faster.
       return grid
 
+
+    # * Compute energy grid using Dask using the objects from PyIsoP
+    # * Currently implemented only for Lennard-Jones interactions
+    def dgrid_calc_dask(grid_obj, ff_obj):
+    
+      """ Description
+      :type grid_obj: PyIsoP grid object
+      :param grid_obj: contains all the information about the grid initialized using PyIsoP
+    
+      :type ff_obj: PyIsoP force field  object
+      :param ff_obj: contains all the information about the force field parameters for energy grid calculation.
+    
+      :raises:
+    
+      :rtype: Lazy evaluated 3D shortes distance grid as a dask array. Call compute on your client to obtain actual values.
+      """  
+      # * Compute the distance to the nearest framework atom at each grid point using Dask arrays as inputs
+      # ! Not to be used outside of this routine
+      def grid_point_distance(g, frameda, Ada, sig, sigda, epsda):
+            import numpy as np
+            # Compute the energy at any grid point.
+            dr = g-frameda
+            dr = dr-np.round(dr)
+            dr = np.dot(Ada, dr.T).T
+            rsq = np.sum(dr**2, axis=1) # * Actual center to center distance squared.
+            rsqrt = np.sqrt(rsq) # * The center to center distance
+            return np.min((rsqrt-sigda*2+sig)) #* Subtract the diameter of the framework atom.
+
+
+      # * Apply GPE over the length of the dask array
+      def apply_distance_using_dask(t1,f1):
+          # Compute the grid for any configuration.
+          import numpy as np 
+          import dask.array as da
+          # gps = da.stack(da.meshgrid(da.linspace(-0.5,0.5, t1.nx_total), da.linspace(-0.5,0.5, t1.ny_total),da.linspace(-0.5,0.5, t1.nz_total)), -1).reshape(-1, 3)
+          gps = da.stack(da.meshgrid(t1.x_grid, t1.y_grid,t1.z_grid), -1).reshape(-1, 3) # * Only the unit cell.
+          gps =gps.rechunk(10000,3)
+          grid = da.apply_along_axis(func1d=grid_point_distance, frameda=da.from_array(t1.coord),  Ada=da.from_array(t1.A),sig = da.from_array(f1.sigma), sigda=da.from_array(f1.sigma_array), epsda=da.from_array(f1.epsilon_array), axis=1, arr=gps)
+          return grid
+      import numpy as np
+      import dask.array as da
+      # * Actual one line code to compute distance grid from PyIsoP initialized grid and force field object
+      dgrid = apply_distance_using_dask(grid_obj,ff_obj).reshape((grid_obj.nx,grid_obj.ny,grid_obj.nz)).rechunk(10,10,10) 
+      # grid =da.tile(grid, (np.int(grid_obj.nx_cells),np.int(grid_obj.ny_cells),np.int(grid_obj.nz_cells))) # * Use the symmetry to compute grid faster.
+      # grid =da.tile(grid, (2,2,2) # * Use the symmetry to compute grid faster.
+      return dgrid
     # * Calculate the energy grid
     def grid_calc(grid_obj, potential_name, ff_obj, rmass=None, T=None):
           """ 
