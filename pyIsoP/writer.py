@@ -126,7 +126,7 @@ class writer:
         f1.close()
 
     # * Write the grid to vtk in unstructured points format
-    def write_vts(grid_obj, path_to_file):
+    def write_vts(grid_obj, path_to_file, nx_cells, ny_cells, nz_cells):
         """ 
         Write the energy grid as a binary vtk (.vts) file.
 
@@ -166,7 +166,7 @@ class writer:
                                 [x[i, j, k], y[i, j, k], z[i, j, k]] = np.dot(
                                     grid_obj.A, [x[i, j, k], y[i, j, k], z[i, j, k]])
         #Write pot into .vts file
-        gridToVTK(path_to_file, x, y, z, pointData={"Potential": grid_obj.pot_repeat})
+        gridToVTK(path_to_file, x, y, z, pointData={"Potential": np.tile(grid_obj.pot, (nx_cells, ny_cells, nz_cells))})
 
     # * Converts the RASPA grid file into a vtk file, excluding the derivatives.
     def RASPA2vts(input_file, output_file):
