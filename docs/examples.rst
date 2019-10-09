@@ -194,7 +194,7 @@ Notes:
                 import numpy as np
                 repeat_grid = np.tile(t1.pot, (2,2,3)) # Let's say you need 2x2x3 for making into VTK.
 
-        -- There is this one popular_strategy_ of using Numba inside Dask to get a massive speed improvement for some algorithms. Unfortunately, the current algorithm requires an array shape change, which prohibits the use to Numba on top of the parallel Dask algorithm. However, the current code is still quite fast. See the benchmarking graph above.
+        -- There is this one popular_strategy_ of using Numba inside Dask to get a massive speed improvement for some algorithms. Unfortunately, the current algorithm requires an array shape change, which prohibits the use of Numba on top of the parallel Dask algorithm. However, the current code is still quite fast. See the benchmarking graph above.
 
 .. _popular_strategy: https://towardsdatascience.com/how-i-learned-to-love-parallelized-applies-with-python-pandas-dask-and-numba-f06b0b367138
 .. _meshgrid: https://docs.scipy.org/doc/numpy/reference/generated/numpy.meshgrid.htm
@@ -221,7 +221,7 @@ We illustrate the complex pores of ZIF-4 using two isosurfaces at 20000 K (silve
 Energy Histogram
 ===========================================
 
-PyIsoP contains the :ref:`histogram` module which offers 3 ways for the user to obtain the energy histogram.  The number of bins and :math:`E_{max}` can be set while initializing the histogram.
+PyIsoP contains the :ref:`histogram` which offers 3 ways for the user to obtain the energy histogram.  The number of bins and :math:`E_{max}` can be set while initializing the histogram.
 All the energies should be in the units of [K] to ensure consistency with the RASPA_ grid output.
 
 1. From the PyIsoP  :ref:`grid3D` object 
@@ -257,7 +257,7 @@ Coordination Number from Machine Learning
 
 In order to predict the guest-guest energy of hydrogen, we use a machine learning model (GPR) trained on the first-shell coordination number.
 Please refer to :ref:`theory` section or our recent work by Gopalan *et al.*, :cite:`gopalan2019fast`  for more details. PyIsoP provides 
-a pre-trained model at 77 K which can predict the hydrogen coordination numbers as a function of  :math:`_{10}`(P), void fraction, largest cavity diameter (A), pore limiting diameter (A)]
+a pre-trained model at 77 K which can predict the hydrogen coordination numbers as a function of  log :math:`_{10}` (P), void fraction, largest cavity diameter (A), pore limiting diameter (A)]
 
 -   To load that model (details are in the  SI of the publication :cite:`gopalan2019fast` 
 
