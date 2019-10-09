@@ -6,7 +6,7 @@ Examples
 
 Here we provide a few simple examples on using the different functionalities offered by PyIsoP. There are more options
 available to the individual functions than the ones demonstrated here. Please refer to the corresponding API reference to 
-find more about the modules and functions and the possible options.b
+find more about the modules and functions and the possible options.
 
 .. _grid:
 
@@ -89,7 +89,7 @@ The rest of the code is very similar to that from before, except ...
 
 
 the energy grid (`grid_dask` in the example above) returned now is a lazy-evaluated Dask array,
- with all the rules and element formulae embedded within. To evaluate it and append your grid object use
+with all the rules and element formulae embedded within. To evaluate it and append your grid object use
 
 
 .. code-block:: python
@@ -216,7 +216,7 @@ We illustrate the complex pores of ZIF-4 using two isosurfaces at 20000 K (silve
 
    
 
-.. _histogram:
+.. _histo:
 
 Energy Histogram
 ===========================================
@@ -279,7 +279,7 @@ a pre-trained model at 77 K which can predict the hydrogen coordination numbers 
 
 
 -   Preferred:  To use algorithms other than GPR, users are encouraged to train their own model and be ready to provide :math:`n_1` as a vector (array corresponding to different pressures) to be fed into
-    the isotherm_ calculation (example below) using the :ref:`predictor` module .
+    the isotherm_ calculation (example below) using the :ref:`predictor` .
 
 .. _isotherm:
 
