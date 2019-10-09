@@ -51,9 +51,9 @@ PyIsoP uses Dask_ to compute energy grids in parallel (multi-threading or over m
 or a High Performance Cluster (HPC) with no or little additional coding on your part. This facilitates super-fast calculation of fine grids
 and/or even high-throughput screening of materials in an interactive fashion, just as if you were working on your local machine. 
 
-We have to initialize a client for Dask depending upon where you want to compute the grid. 
+We have to initialize a client for Dask depending upon the machine you want to use to compute the grid. 
 
-        2.1 **Working on your laptop (1 CPU)**: No need to do anything, Dask will automatically recognize and use multi-threading. No overhead will occur from information transfer between nodes.
+        2.1 **Working on your laptop (1 CPU)**: No need to do anything, Dask will automatically recognize your cores and use multi-threading. No overhead will occur from making copies and transfering information between workers.
 
         2.2 **Working on an HPC (many, many CPUs)**: You have to start a mini-cluster with your processor and memory requirements and set that as your client. Here's an example on an HPC that uses SLURM as the job-scheduler
 
