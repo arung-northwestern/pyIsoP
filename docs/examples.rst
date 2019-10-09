@@ -37,11 +37,11 @@ However, if you are calculating a fine grid, the resultant array may not fit int
         # Calculate the grid
         t1=grid3D.grid3D('ZIF-4_mod.cif',spacing=0.5)          # Intialize grid3D object
         f1=forcefields.forcefields(t1, force_field='C:/PyIsoP/forcefield/UFF', sigma=3.95, epsilon=46)      # Update the force field details to grid obj. t1
-        t2= grid3D.grid3D.grid_calc(t1,"lj",f1)                          # Save to different object or overwrite the existing object with computed 3D grid.
+        t1= grid3D.grid3D.grid_calc(t1,"lj",f1)                          # Overwrite the existing object with computed 3D grid.
 
         # Save coordinates for visualizing later
-        writer.writer.write_vts(t2,'zif-4_grid')                   # Write a binary vtk file
-        writer.writer.write_frame(t2,'zif-4_repeat.pdb')    # Save the corresponding replicated structure corresponding to a 12.8 A (default) cut-off.
+        writer.writer.write_vts(t1,'zif-4_grid')                   # Write a binary vtk file
+        writer.writer.write_frame(t1,'zif-4_repeat.pdb')    # Save the corresponding replicated structure corresponding to a 12.8 A (default) cut-off.
 
 .. _grid_calc_dask:
 
@@ -88,17 +88,18 @@ The rest of the code is very similar to that from before, except ...
 
 
 
-the energy grid (grid_dask in the example above) returned now is a lazy-evaluated Dask array, with all the rules and element formulae embedded within. To evaluate it use
+the energy grid (`grid_dask` in the example above) returned now is a lazy-evaluated Dask array,
+ with all the rules and element formulae embedded within. To evaluate it and append your grid object use
 
 
 .. code-block:: python
         
-        # To evaluate it then and there, we can't do anything else unless evaluation is complete.
-        grid_numpy = grid_dask.compute()
+        # To evaluate it and append your grid object then and there, we can't do anything else unless evaluation is complete.
+        t1.pot = grid_dask.compute()
 
         # To evaluate in the background. We can continue adding rules to the array while the array is being 'persisted'.
-        client.persist(grid) # Starts in the background on an HPC.
-        grid = grid + 1.2345678 # Continue doing things to the array, just a silly example.
+        client.persist(grid_dask) # Starts in the background on an HPC.
+        grid_dask = grid_dask + 1.2345678 # Continue doing things to the array, just a silly example.
 
 Please refer to Dask documentation for all the possibilities using Dask-clients_ and Dask-arrays_.
 
@@ -146,14 +147,14 @@ Since Dask is already scalable and interactive, PyIsoP can be readily extended t
 
         # Or create a new grid3D object for any of the CIFs (first entry chosen below) and save the energy grid there there
         t1=grid3D.grid3D(cif_list[0])          # Intialize grid3D object
-        t1.pot_repeat = many_grids.compute()[0]       # Stored the desired grid into the grid3D object
+        t1.pot = many_grids.compute()[0]       # Stored the desired grid into the grid3D object
 
-        # Like before, you can also write this into a binary VTK (.vts) file for visualization
+        # Like before, you can also write this into a binary VTK (.vts) file for visualization while specifying the number of unit cells along each direction.
         from pyIsoP import writer
-        writer.writer.write_vts(grid_obj=t1, 'some_filename')
+        writer.writer.write_vts(grid_obj=t1, path_to_file='some_filename', nx_cells=2, ny_cells=2, nz_cells=2)
 
 
-4. Benchmarking on a Fine Energy Grids
+4. Benchmarking on a Fine Energy Grid
 --------------------------------------
 
 Let's try computing the energy grid for Cu-BTC which has a simple-cubic unit cell and an edge length of 26.343 angstroms. Our mini-cluster consists of one or more workers, where each worker (or job) consists of 4 CPUs and a memory
@@ -193,7 +194,7 @@ Notes:
                 import numpy as np
                 repeat_grid = np.tile(t1.pot, (2,2,3)) # Let's say you need 2x2x3 for making into VTK.
 
-        -- There is this one popular_strategy_ of using Numba inside Dask to get a massive speed improvement for some algorithms. Unfortunately, the current algorithm requires an array shape change, which prohibits the use to Numba on top of the parallel Dask algorithm. However, the current code is still quite fast. See the benchmarking graphs above.
+        -- There is this one popular_strategy_ of using Numba inside Dask to get a massive speed improvement for some algorithms. Unfortunately, the current algorithm requires an array shape change, which prohibits the use to Numba on top of the parallel Dask algorithm. However, the current code is still quite fast. See the benchmarking graph above.
 
 .. _popular_strategy: https://towardsdatascience.com/how-i-learned-to-love-parallelized-applies-with-python-pandas-dask-and-numba-f06b0b367138
 .. _meshgrid: https://docs.scipy.org/doc/numpy/reference/generated/numpy.meshgrid.htm
@@ -229,7 +230,7 @@ All the energies should be in the units of [K] to ensure consistency with the RA
 
         import pyIsoP.histo as histo                 # import the histogram module
         h = histo.histo()                                     # initialize a histo object
-        h = histo.histo.grid2histo(t2, h)            # update (overwrite) the histo object with histogram calculated from the grid3D object t2  
+        h = histo.histo.grid2histo(t1, h)            # update (overwrite) the histo object with histogram calculated from the grid3D object t2  
 
 2.  Read in the energy grid from a RASPA_ style .grid file, with x, y, z, E data or from  .cube file. 
 
