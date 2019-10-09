@@ -14,7 +14,7 @@ Python Isotherm Prediction (PyIsoP)
 PyIsoP uses a fast and accurate, semi-analytical algorithm to calculate the adsorption of
 single-site molecules in nanoporous materials using energy grids. The energy grid algorithm in PyIsoP is parallelized using 
 Dask_ (python) such that PyIsoP will work just as well on your laptop (1 CPU, multi-threading) and 
-and on a High Performance Cluster (hundreds of CPU, multi-processing) with no or little additional 
+on a High Performance Cluster (hundreds of CPU, multi-processing) with no or little additional 
 coding on your part. The method itself is about 100 times faster compared to grand canonical Monte Carlo (GCMC) simulations, combined with the fast calculation of energy grids 
 PyIsoP is ideal for obtaining quick estimates of adsorption and even interactive high-throughput screening of large databases. Although originally
 developed for predicting hydrogen adsorption, the underlying algorithm can be readily applied to other
