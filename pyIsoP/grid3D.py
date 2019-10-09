@@ -145,7 +145,7 @@ class grid3D(object):
                 self.mof_atm_names.append(frame_repeat.get_chemical_symbols()[i])
 
         self.pot = np.zeros((self.nx, self.ny, self.nz))
-        self.pot_repeat = np.tile(self.pot, (self.nx_cells, self.ny_cells, self.nz_cells))
+        # self.pot_repeat = np.tile(self.pot, (self.nx_cells, self.ny_cells, self.nz_cells))
         # * Total points
         self.nx_total = int(self.nx*self.nx_cells)
         self.ny_total = int(self.ny*self.ny_cells)
