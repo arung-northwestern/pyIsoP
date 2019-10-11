@@ -163,7 +163,7 @@ only the total time is plotted here. We choose a rather fine grid of 0.1 angstro
 by employing 10 (40 CPUs), 20 (80 CPUs), 25(100 CPUs) and 30 (120 CPUs) workers respectively with each worker having a maximum memory of 100 GB. We see that even at 120 CPUs, the total 
 computation time continues to drop linearly, which indicates that we haven't hit the point of diminishing returns yet, at least for this fine of a grid on this material. 
 
-.. figure:: ./images/bench_pyisop.jpg
+.. figure:: ./images/bench_pyisop.png
    :align: center
 ..    :height: 300
 ..    :width: 400
