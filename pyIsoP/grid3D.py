@@ -377,7 +377,7 @@ class grid3D(object):
           import dask.array as da
           # gps = da.stack(da.meshgrid(da.linspace(-0.5,0.5, t1.nx_total), da.linspace(-0.5,0.5, t1.ny_total),da.linspace(-0.5,0.5, t1.nz_total)), -1).reshape(-1, 3)
           gps = da.stack(da.meshgrid(t1.x_grid, t1.y_grid,t1.z_grid, indexing='ij'), -1).reshape(-1, 3) # * Only the unit cell.
-          gps =gps.rechunk({0:'auto',1:3})
+          gps =gps.rechunk(50000,3)
           grid = da.apply_along_axis(func1d=grid_point_energy, frameda=da.from_array(t1.coord), Ada=da.from_array(t1.A), sigda=da.from_array(f1.sigma_array), epsda=da.from_array(f1.epsilon_array), axis=1, arr=gps)
           return grid
       import numpy as np
@@ -424,7 +424,7 @@ class grid3D(object):
           import dask.array as da
           # gps = da.stack(da.meshgrid(da.linspace(-0.5,0.5, t1.nx_total), da.linspace(-0.5,0.5, t1.ny_total),da.linspace(-0.5,0.5, t1.nz_total)), -1).reshape(-1, 3)
           gps = da.stack(da.meshgrid(t1.x_grid, t1.y_grid,t1.z_grid, indexing='ij'), -1).reshape(-1, 3) # * Only the unit cell.
-          gps =gps.rechunk({0:'auto',1:3})
+          gps =gps.rechunk(50000,3)
           grid = da.apply_along_axis(func1d=grid_point_distance, frameda=da.from_array(t1.coord),  Ada=da.from_array(t1.A),sig = da.from_array(f1.sigma), sigda=da.from_array(f1.sigma_array), epsda=da.from_array(f1.epsilon_array), axis=1, arr=gps)
           return grid
       import numpy as np
